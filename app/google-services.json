@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "630217798463",
+    "firebase_url": "https://byme-94a7c.firebaseio.com",
+    "project_id": "byme-94a7c",
+    "storage_bucket": "byme-94a7c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:630217798463:android:ea534ad504ec7be2",
+        "android_client_info": {
+          "package_name": "com.mastersoft.steb.bymeapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "630217798463-qa1fcqbbku8989b2cq1gemr3jj3vlhc6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mastersoft.steb.bymeapp",
+            "certificate_hash": "18401a3b328c6942e8e1920cad4c9822d5e14bad"
+          }
+        },
+        {
+          "client_id": "630217798463-rnlng1csdittfvma19is3u5ugi7uu64p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGebwA0xR9zL_98xCnG2khBM5sAZNwEzs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "630217798463-rnlng1csdittfvma19is3u5ugi7uu64p.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "630217798463-03ovq3nuturmrvieuf4sjlok4g7esav2.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mastersoft.steb.bymeapp"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
