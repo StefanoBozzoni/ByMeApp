@@ -7,11 +7,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.mastersoft.steb.bymeapp.adapters.ServiceReqAdapter;
+import com.mastersoft.steb.bymeapp.adapters.fbServiceReqAdapter;
 import com.mastersoft.steb.bymeapp.model.ServiceReq;
 
 public class ServiceReqController {
-    static private ServiceReq sr;
 
     public static class Error {
          private int errorCode;
@@ -46,14 +45,14 @@ public class ServiceReqController {
 
     }
 
-    public static ServiceReq getServiceReqAtKey(String key, final ServiceReqAdapter.Completation c) {
+    public static void getServiceReqAtKey(String key, final fbServiceReqAdapter.Completation c) {
         FirebaseDatabase dbInstance=FirebaseDatabase.getInstance();
         DatabaseReference databaseRef = dbInstance.getReference("ServiceReq");
 
         databaseRef.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
-                sr = snapshot.getValue(ServiceReq.class);
+                ServiceReq sr = snapshot.getValue(ServiceReq.class);
                 c.onComplete(sr);
             }
 
@@ -62,7 +61,6 @@ public class ServiceReqController {
 
             }
         });
-        return sr;
     }
 }
 

@@ -9,6 +9,7 @@ public class ServiceReq {
     private String description;
     private double propGain;
     private String shortDescr;
+    private String perfPlace;
     private long   timestamp;
 
     public ServiceReq() {
@@ -25,7 +26,7 @@ public class ServiceReq {
      * @param shortDescr
      */
 
-    public ServiceReq(String userID,String shortDescr, String description, String contactInfos, String deliveryPlace, String deliveryTime, double propGain, long timestamp) {
+    public ServiceReq(String userID,String shortDescr, String description, String contactInfos, String deliveryPlace, String perfPlace, String deliveryTime, double propGain, long timestamp) {
         super();
         this.userID = userID;
         this.contactInfos  = contactInfos;
@@ -35,6 +36,7 @@ public class ServiceReq {
         this.propGain      = propGain;
         this.shortDescr    = shortDescr;
         this.timestamp     = timestamp;
+        this.perfPlace     = perfPlace;
     }
 
 
@@ -103,5 +105,11 @@ public class ServiceReq {
         this.timestamp = timestamp;
     }
 
+    public String getPerfPlace() {
+        return perfPlace;
+    }
 
+    public void setPerfPlace(String perfPlace) {
+        this.perfPlace = perfPlace;
+    }
 }

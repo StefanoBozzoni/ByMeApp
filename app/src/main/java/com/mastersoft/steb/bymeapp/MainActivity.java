@@ -185,6 +185,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.menu_myOffers) {
             //Invoca activity che mostra i servizi dell'utente
             Intent intent = new Intent(this,OfferListActivity.class);
+            intent.putExtra(Constants.OFFER_LIST_PARAM,Constants.OF_USER_OFFER);
             startActivity(intent);
             return true;
         }

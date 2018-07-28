@@ -9,7 +9,7 @@ public class Offer {
     private String deliveryPlace;
     private String serviceDescr;
     private String notes;
-    private String deliveryDateTime;
+    private String deliveryTime;
     private double propGain;
     private String userID;
 
@@ -38,18 +38,19 @@ public class Offer {
 
     /**
      * @param deliveryPlace
-     * @param deliveryDateTime
+     * @param deliveryTime
      * @param serReqID
      * @param propGain
      */
-    public Offer(String userID, String serReqID, String serviceDescr, String deliveryPlace, String deliveryDateTime, double propGain, String notes) {
+    public Offer(String userID, String serReqID, String serviceDescr, String deliveryPlace, String deliveryTime, double propGain, String notes) {
         super();
         this.serReqID      = serReqID;
         this.deliveryPlace = deliveryPlace;
-        this.deliveryDateTime  = deliveryDateTime;
+        this.deliveryTime  = deliveryTime;
         this.propGain      = propGain;
         this.notes         = notes;
         this.userID        = userID;
+        this.serviceDescr = serviceDescr;
     }
 
     public String getSerReqID() {
@@ -68,10 +69,10 @@ public class Offer {
         this.deliveryPlace = deliveryPlace;
     }
 
-    public String getDeliveryTime() { return deliveryDateTime; }
+    public String getDeliveryTime() { return deliveryTime; }
 
-    public void setDeliveryTime(long deliveryTime) {
-        this.deliveryDateTime = deliveryDateTime;
+    public void setDeliveryTime(String deliveryTime) {
+        this.deliveryTime = deliveryTime;
     }
 
     public double getPropGain() {

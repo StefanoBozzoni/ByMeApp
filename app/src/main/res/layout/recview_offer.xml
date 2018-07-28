@@ -29,11 +29,11 @@
         <TextView
             android:id="@+id/deliveryPlace_tv"
             android:layout_width="122dp"
-            android:layout_height="23dp"
+            android:layout_height="20dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="#8A000000"
+            android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/serviceDescr_tv" />
 
@@ -86,7 +86,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
             android:text="planned gain:"
-            android:textAlignment="center"
+            android:textAlignment="viewStart"
             android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/deliveryPlace_tv" />

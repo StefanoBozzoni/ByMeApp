@@ -1,5 +1,6 @@
 package com.mastersoft.steb.bymeapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -18,9 +19,12 @@ import com.mastersoft.steb.bymeapp.model.Offer;
 import com.mastersoft.steb.bymeapp.model.ServiceReq;
 
 public class OfferListActivity extends AppCompatActivity {
-    private RecyclerView   myRecyclerView;
-    fbOffersAdapter        mOffersAdapter;
-    LinearLayoutManager    linearLayoutManager;
+    private RecyclerView            myRecyclerView;
+    private fbOffersAdapter         mOffersAdapter;
+    private LinearLayoutManager     linearLayoutManager;
+    private int                     mCallerParam;
+    private String                  mServiceKey;
+
 
     @Override
     protected void onStart() {
@@ -42,7 +46,7 @@ public class OfferListActivity extends AppCompatActivity {
         toolbar.setTitle(getResources().getString(R.string.my_offer_list));
         setSupportActionBar(toolbar);
 
-
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,24 +55,49 @@ public class OfferListActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        */
 
-        Query query = FirebaseDatabase.getInstance()
-                .getReference()
-                .child("Offers")
-                .orderByChild("userID")
-                .equalTo("userIdProva");
+        mCallerParam =0;
+        Intent callerIntent=getIntent();
+        if ((callerIntent.hasExtra(Constants.OFFER_LIST_PARAM)) && (callerIntent.getExtras()!=null)) {
+            mCallerParam = callerIntent.getExtras().getInt(Constants.OFFER_LIST_PARAM);
+            mServiceKey  = callerIntent.getExtras().getString(Constants.SERVICE_KEY,"");
+        }
 
-        FirebaseRecyclerOptions<Offer> options = new FirebaseRecyclerOptions.Builder<Offer>()
-                .setQuery(query, Offer.class)
-                .build();
+        FirebaseRecyclerOptions<Offer> options=null;
 
-        mOffersAdapter = new fbOffersAdapter(options);
-        myRecyclerView = findViewById(R.id.offers_rv);
-        myRecyclerView.setHasFixedSize(true);
+        if (mCallerParam==Constants.OF_USER_OFFER) {
+            Query query = FirebaseDatabase.getInstance()
+                    .getReference()
+                    .child("Offers")
+                    .orderByChild("userID")
+                    .equalTo("userIdProva");
 
-        linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        myRecyclerView.setLayoutManager(linearLayoutManager);
-        myRecyclerView.setAdapter(mOffersAdapter);
+            options = new FirebaseRecyclerOptions.Builder<Offer>()
+                    .setQuery(query, Offer.class)
+                    .build();
+        } else if (mCallerParam==Constants.OF_SRV_OFFER)
+        {
+            Query query = FirebaseDatabase.getInstance()
+                    .getReference()
+                    .child("Offers")
+                    .orderByChild("SerReqID")
+                    .equalTo(mServiceKey);
+
+            options = new FirebaseRecyclerOptions.Builder<Offer>()
+                    .setQuery(query, Offer.class)
+                    .build();
+        }
+
+        if (options!=null) {
+            mOffersAdapter = new fbOffersAdapter(options);
+            myRecyclerView = findViewById(R.id.offers_rv);
+            myRecyclerView.setHasFixedSize(true);
+
+            linearLayoutManager = new LinearLayoutManager(this);
+            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+            myRecyclerView.setLayoutManager(linearLayoutManager);
+            myRecyclerView.setAdapter(mOffersAdapter);
+        }
     }
 }

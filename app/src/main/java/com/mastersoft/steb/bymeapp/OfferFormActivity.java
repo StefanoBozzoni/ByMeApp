@@ -1,5 +1,6 @@
 package com.mastersoft.steb.bymeapp;
 
+import android.content.Intent;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +14,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mastersoft.steb.bymeapp.Controllers.OfferController;
 import com.mastersoft.steb.bymeapp.Controllers.ServiceReqController;
-import com.mastersoft.steb.bymeapp.adapters.ServiceReqAdapter;
+import com.mastersoft.steb.bymeapp.adapters.fbOffersAdapter;
+import com.mastersoft.steb.bymeapp.adapters.fbServiceReqAdapter;
 import com.mastersoft.steb.bymeapp.model.Offer;
 import com.mastersoft.steb.bymeapp.model.ServiceReq;
 import com.mastersoft.steb.bymeapp.utils.MaskWatcher;
@@ -23,18 +25,17 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.mastersoft.steb.bymeapp.Controllers.ServiceReqController.getServiceReqAtKey;
-
-public class OfferFormActivity extends AppCompatActivity implements ServiceReqAdapter.Completation {
+public class OfferFormActivity extends AppCompatActivity implements fbServiceReqAdapter.Completation, fbOffersAdapter.Completation {
     String mKeyService;
     @BindView(R.id.deliveryDate_et)  TextView deliveryDate_et;
     @BindView(R.id.deliveryTime_et)  TextView deliveryTime_et;
     @BindView(R.id.deliveryPlace_et) TextView deliveryPlace_et;
     @BindView(R.id.proposedGain_et)  TextView proposedGain_et;
     @BindView(R.id.serviceDescr_lbl) TextView serviceDescr_lbl;
-    @BindView(R.id.notes_et)         TextView notes_et;
+    @BindView(R.id.notes_et)         TextView          notes_et;
     @BindView(R.id.clOfferForm)      CoordinatorLayout coordinatorLayout;
-    private DatabaseReference mDbOffer;
+    private                          DatabaseReference mDbOffer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,15 +48,44 @@ public class OfferFormActivity extends AppCompatActivity implements ServiceReqAd
         deliveryDate_et.addTextChangedListener(new MaskWatcher("##/##/##"));
         deliveryTime_et.addTextChangedListener(new MaskWatcher("##:##"));
 
-        if (getIntent().hasExtra(Constants.OFFER_PARAM_KEY)) {
+        if (getIntent().hasExtra(Constants.SERVICE_KEY)) {
             Bundle extras = getIntent().getExtras();
-            if (extras != null) mKeyService = extras.getString(Constants.OFFER_PARAM_KEY);
+            if (extras != null) mKeyService = extras.getString(Constants.SERVICE_KEY);
         }
         if (mKeyService!=null)
-            getServiceReqAtKey(mKeyService, this);
+            ServiceReqController.getServiceReqAtKey(mKeyService, this);
 
         FirebaseDatabase dbInstance=FirebaseDatabase.getInstance();
         mDbOffer = dbInstance.getReference("Offers");
+        Intent callerIntent = getIntent();
+
+        int mCallerParam=0;
+        String mOfferKey="";
+        if ((callerIntent.hasExtra(Constants.OFFER_FORM_PARAM)) && (callerIntent.getExtras()!=null)) {
+            mCallerParam = callerIntent.getExtras().getInt(Constants.OFFER_FORM_PARAM);
+            mOfferKey    = callerIntent.getExtras().getString(Constants.OFFER_KEY);
+        }
+
+        if (mCallerParam==Constants.OF_VIEW_OFFER_FORM) {
+            DisableEdits();
+            LoadDbValues(mOfferKey); //TODO: KEY IS ALWAYS ""
+            //insertButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void DisableEdits() {
+            deliveryDate_et.setEnabled(false);
+            deliveryTime_et.setEnabled(false);
+            deliveryPlace_et.setEnabled(false);
+            proposedGain_et.setEnabled(false);
+            serviceDescr_lbl.setEnabled(false);
+            notes_et.setEnabled(false);
+    }
+
+    private void LoadDbValues(String key) {
+            if (!key.trim().equals("")) {
+                OfferController.getOfferAtKey(key, this);
+            }
     }
 
     @Override
@@ -65,6 +95,12 @@ public class OfferFormActivity extends AppCompatActivity implements ServiceReqAd
             serviceDescr_lbl.setText(sr.getShortDescr());
         }
     }
+
+    @Override
+    public void onComplete(Offer of) {
+
+    }
+
 
     public void InsertDB_BtnClick(View view) {
 
@@ -93,7 +129,7 @@ public class OfferFormActivity extends AppCompatActivity implements ServiceReqAd
 
         Date d= new Date();
         long timestamp = d.getTime();
-        Offer of = new Offer("userIdProva",
+        Offer sr = new Offer("userIdProva",
                 mKeyService,
                 serviceDescr,
                 deliveryPlace,
@@ -101,9 +137,8 @@ public class OfferFormActivity extends AppCompatActivity implements ServiceReqAd
                 propGain,
                 notes);
 
-        OfferController ofc=(new OfferController());
-
-        OfferController.Error se = ofc.validate(of);
+        OfferController of=(new OfferController());
+        OfferController.Error se = of.validate(sr);
 
         if (se.getErrorCode()!=0) {
             Snackbar snackbar = Snackbar
@@ -114,7 +149,7 @@ public class OfferFormActivity extends AppCompatActivity implements ServiceReqAd
 
         //Validazione e snackbar nel caso dati non validi
         String id = mDbOffer.push().getKey();
-        if (id!=null) mDbOffer.child(id).setValue(of);
+        if (id!=null) mDbOffer.child(id).setValue(sr);
         Toast.makeText(this, "Offer added", Toast.LENGTH_LONG).show();
 
     }

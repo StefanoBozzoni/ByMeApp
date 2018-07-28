@@ -27,7 +27,9 @@ public class UserServicesReq extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_services_req_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("ByMeApp");
         setSupportActionBar(toolbar);
+
 
         mCallerParam =0;
         Intent callerIntent=getIntent();

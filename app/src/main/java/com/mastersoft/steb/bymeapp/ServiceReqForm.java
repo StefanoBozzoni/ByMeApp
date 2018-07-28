@@ -1,17 +1,20 @@
 package com.mastersoft.steb.bymeapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mastersoft.steb.bymeapp.Controllers.ServiceReqController;
+import com.mastersoft.steb.bymeapp.adapters.fbServiceReqAdapter;
 import com.mastersoft.steb.bymeapp.model.ServiceReq;
 import com.mastersoft.steb.bymeapp.utils.MaskWatcher;
 import java.util.Date;
@@ -19,7 +22,7 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ServiceReqForm extends AppCompatActivity {
+public class ServiceReqForm extends AppCompatActivity implements fbServiceReqAdapter.Completation {
     @BindView(R.id.serviceShortDescrTv) EditText edtServiceShortDescrTv;
     @BindView(R.id.serviceDescrTv)      EditText edtServiceDescrTv;
     @BindView(R.id.dateSrvReqTv)        EditText edtDateSrvReqTv;
@@ -29,21 +32,54 @@ public class ServiceReqForm extends AppCompatActivity {
     @BindView(R.id.propGainTv)          EditText edtPropGainTv;
     @BindView(R.id.contactInfoTv)       EditText edtContactInfoTv;
     @BindView(R.id.clServiceReqForm)    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.InsertDB_Btn)        Button insertButton;
     private                             DatabaseReference mDbServReq;
+    private                             int               mCallerParam;
+    private                             String            mServiceKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_service_req_form);
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Intent callerIntent = getIntent();
+        mCallerParam=0;
+        if ((callerIntent.hasExtra(Constants.SERVICE_REQ_PARAM)) && (callerIntent.getExtras()!=null)) {
+            mCallerParam = callerIntent.getExtras().getInt(Constants.SERVICE_REQ_PARAM);
+            mServiceKey  = callerIntent.getExtras().getString(Constants.SERVICE_KEY);
+        }
+
+        if (mCallerParam==Constants.SR_VIEW_SRV_FORM) {
+            DisableEdits();
+            LoadDbValues(mServiceKey);
+            insertButton.setVisibility(View.INVISIBLE);
+        }
+
         FirebaseDatabase dbInstance=FirebaseDatabase.getInstance();
         mDbServReq = dbInstance.getReference("ServiceReq");
 
         edtDateSrvReqTv.addTextChangedListener(new MaskWatcher("##/##/##"));
         edtTimeSrvReqTv.addTextChangedListener(new MaskWatcher("##:##"));
 
+    }
+
+    private void DisableEdits() {
+        edtServiceShortDescrTv.setEnabled(false);
+        edtServiceDescrTv.setEnabled(false);
+        edtDateSrvReqTv.setEnabled(false);
+        edtTimeSrvReqTv.setEnabled(false);
+        edtPerformPlaceTv.setEnabled(false);
+        edtDeliveryPlaceTv.setEnabled(false);
+        edtPropGainTv.setEnabled(false);
+        edtContactInfoTv.setEnabled(false);
+    }
+
+    private void LoadDbValues(String key) {
+        ServiceReqController.getServiceReqAtKey(key, this);
     }
 
     public void InsertDB_BtnClick(View view) {
@@ -79,6 +115,7 @@ public class ServiceReqForm extends AppCompatActivity {
                                             serviceDescr,
                                             contactInfo,
                                             deliveryPlace,
+                                            performPlace,
                                   dateSrvReq+' '+timeSrvReq,
                                             propGain,
                                             timestamp);
@@ -96,6 +133,19 @@ public class ServiceReqForm extends AppCompatActivity {
         String id = mDbServReq.push().getKey();
         if (id!=null) mDbServReq.child(id).setValue(sr);
         Toast.makeText(this, "Service request added", Toast.LENGTH_LONG).show();
+        onBackPressed();
 
+    }
+
+    @Override
+    public void onComplete(ServiceReq sr) {
+        edtServiceShortDescrTv.setText(sr.getShortDescr());
+        edtServiceDescrTv.setText(sr.getDescription());
+        edtDateSrvReqTv.setText(sr.getDeliveryTime());
+        edtTimeSrvReqTv.setText(sr.getDeliveryTime());
+        edtPerformPlaceTv.setText(sr.getPerfPlace());
+        edtDeliveryPlaceTv.setText(sr.getDeliveryPlace());
+        edtPropGainTv.setText(String.valueOf(sr.getPropGain()));
+        edtContactInfoTv.setText(sr.getContactInfos());
     }
 }
