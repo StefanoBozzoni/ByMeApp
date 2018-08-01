@@ -12,6 +12,11 @@
     android:orderInCategory="20"
     android:title="@string/my_offers"
     app:showAsAction="never" />
+    <item
+        android:id="@+id/menu_signOut"
+        android:orderInCategory="20"
+        android:title="@string/sign_out"
+        app:showAsAction="never" />
 
 
 

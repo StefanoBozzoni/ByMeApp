@@ -2,14 +2,19 @@ package com.mastersoft.steb.bymeapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -19,19 +24,35 @@ import com.mastersoft.steb.bymeapp.model.Prova;
 import com.mastersoft.steb.bymeapp.model.ServiceReq;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     private DatabaseReference mDbOffers;
     private DatabaseReference mDbServReq;
 
-    private ArrayList<Offer>      offers;
-    private ServiceReq[]          srvReqList;
-    private ArrayList<Prova>      provas;
-    private RecyclerView          myRecyclerView;
-    fbServiceReqAdapter           mServiceReqAdapter;
-    LinearLayoutManager           linearLayoutManager;
+    private ArrayList<Offer>  offers;
+    private ServiceReq[]      srvReqList;
+    private RecyclerView      myRecyclerView;
+    fbServiceReqAdapter       mServiceReqAdapter;
+    LinearLayoutManager       mLinearLayoutManager;
+    private                   FirebaseAuth mFirebaseAuth;
+    private                   FirebaseAuth.AuthStateListener mAuthStateListener;
+    private                   FirebaseUser mFbUser;
+    private static final int  RC_SIGN_IN = 1;
 
 
+    /*
+    String id = mDatabaseOffers.push().getKey();
+
+    //creating an Artist Object
+    Prova aProva = new Prova(id, "prova");
+
+    //Saving the Artist
+    mDatabaseOffers.child(id).setValue(aProva);
+
+    //displaying a success toast
+    Toast.makeText(this, "Prova added", Toast.LENGTH_LONG).show();
+    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,12 +61,27 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FirebaseDatabase dbInstance=FirebaseDatabase.getInstance();
+        mFirebaseAuth       =FirebaseAuth.getInstance();
+
         mDbOffers  = dbInstance.getReference("Offers");
         mDbServReq = dbInstance.getReference("ServiceReq");
 
         offers = new ArrayList<Offer>();
-        provas = new ArrayList<Prova>();
         srvReqList=null;
+
+        Query query = FirebaseDatabase.getInstance()
+                .getReference()
+                .child("ServiceReq")
+                .orderByChild("timestamp").limitToLast(10);
+
+        FirebaseRecyclerOptions<ServiceReq> options = new FirebaseRecyclerOptions.Builder<ServiceReq>()
+                .setQuery(query, ServiceReq.class)
+                .build();
+        mServiceReqAdapter = new fbServiceReqAdapter(options,Constants.SR_ADD_OFFER);
+
+        myRecyclerView=findViewById(R.id.serviceReq_rv);
+        myRecyclerView.setHasFixedSize(true);
+
 
         //Insert Offers
         /*
@@ -66,40 +102,55 @@ public class MainActivity extends AppCompatActivity {
 
 */
 
-        Query query = FirebaseDatabase.getInstance()
-                        .getReference()
-                        .child("ServiceReq")
-                        .orderByChild("timestamp").limitToLast(10);
 
-
-        FirebaseRecyclerOptions<ServiceReq> options = new FirebaseRecyclerOptions.Builder<ServiceReq>()
-                                                        .setQuery(query, ServiceReq.class)
-                                                        .build();
-        mServiceReqAdapter = new fbServiceReqAdapter(options,Constants.SR_ADD_OFFER);
-        myRecyclerView=findViewById(R.id.serviceReq_rv);
-        myRecyclerView.setHasFixedSize(true);
-
-        linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        myRecyclerView.setLayoutManager(linearLayoutManager);
-        myRecyclerView.setAdapter(mServiceReqAdapter);
-        //mServiceReqAdapter.setData(srvReqList);
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    onUserSignInInitialize(user);
+                    //Toast.makeText(MainActivity.this, "You're now signed in. Welcome to ByMeApp.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // User is signed out
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setIsSmartLockEnabled(false)
+                                    .setAvailableProviders(Arrays.asList(
+                                            new AuthUI.IdpConfig.GoogleBuilder().build(),
+                                            new AuthUI.IdpConfig.EmailBuilder().build(),
+                                            new AuthUI.IdpConfig.PhoneBuilder().build()))
+                                    .build(),
+                            RC_SIGN_IN);
+                }
+            }
+        };
 
     }
 
-    /*
-    String id = mDatabaseOffers.push().getKey();
+    private void onUserSignInInitialize(FirebaseUser user) {
+        mFbUser=user;
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        myRecyclerView.setLayoutManager(mLinearLayoutManager);
+        myRecyclerView.setAdapter(mServiceReqAdapter);
 
-    //creating an Artist Object
-    Prova aProva = new Prova(id, "prova");
+    }
 
-    //Saving the Artist
-    mDatabaseOffers.child(id).setValue(aProva);
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+    }
 
-    //displaying a success toast
-    Toast.makeText(this, "Prova added", Toast.LENGTH_LONG).show();
-    */
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
 
+
+    }
 
     @Override
     protected void onStop() {
@@ -111,7 +162,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         mServiceReqAdapter.startListening();
-
         /*
         mDbServReq.addChildEventListener(new ChildEventListener() {
 
@@ -190,6 +240,21 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
+        if (id == R.id.menu_signOut) {
+            AuthUI.getInstance().signOut(this);
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==RC_SIGN_IN) {
+            if (resultCode==RESULT_OK) {
+                //finish();
+            }
+
+        }
     }
 }
