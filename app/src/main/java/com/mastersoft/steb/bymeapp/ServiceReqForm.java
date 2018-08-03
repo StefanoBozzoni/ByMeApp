@@ -36,6 +36,9 @@ public class ServiceReqForm extends AppCompatActivity implements fbServiceReqAda
     private                             DatabaseReference mDbServReq;
     private                             int               mCallerParam;
     private                             String            mServiceKey;
+    private                             String            mUserId;
+    private                             MaskWatcher mDateWatcher;
+    private                             MaskWatcher mTimeWatcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,7 @@ public class ServiceReqForm extends AppCompatActivity implements fbServiceReqAda
         if ((callerIntent.hasExtra(Constants.SERVICE_REQ_PARAM)) && (callerIntent.getExtras()!=null)) {
             mCallerParam = callerIntent.getExtras().getInt(Constants.SERVICE_REQ_PARAM);
             mServiceKey  = callerIntent.getExtras().getString(Constants.SERVICE_KEY);
+            mUserId      = callerIntent.getExtras().getString(Constants.USER_ID,"");
         }
 
         if (mCallerParam==Constants.SR_VIEW_SRV_FORM) {
@@ -62,8 +66,11 @@ public class ServiceReqForm extends AppCompatActivity implements fbServiceReqAda
         FirebaseDatabase dbInstance=FirebaseDatabase.getInstance();
         mDbServReq = dbInstance.getReference("ServiceReq");
 
-        edtDateSrvReqTv.addTextChangedListener(new MaskWatcher("##/##/##"));
-        edtTimeSrvReqTv.addTextChangedListener(new MaskWatcher("##:##"));
+        mDateWatcher = new MaskWatcher("##/##/##");
+        mTimeWatcher = new MaskWatcher("##:##");
+
+        edtDateSrvReqTv.addTextChangedListener(mDateWatcher);
+        edtTimeSrvReqTv.addTextChangedListener(mTimeWatcher);
 
     }
 
@@ -110,15 +117,16 @@ public class ServiceReqForm extends AppCompatActivity implements fbServiceReqAda
 
         Date d= new Date();
         long timestamp = d.getTime();
-        ServiceReq sr = new ServiceReq("userIdProva2",
-                                            serviceShortDescr,
-                                            serviceDescr,
-                                            contactInfo,
-                                            deliveryPlace,
-                                            performPlace,
-                                  dateSrvReq+' '+timeSrvReq,
-                                            propGain,
-                                            timestamp);
+        ServiceReq sr = new ServiceReq(mUserId,
+                                       serviceShortDescr,
+                                       serviceDescr,
+                                       contactInfo,
+                                       deliveryPlace,
+                                       performPlace,
+                                       dateSrvReq,
+                                       timeSrvReq,
+                                       propGain,
+                                       timestamp);
 
         ServiceReqController sc=(new ServiceReqController());
         ServiceReqController.Error se = sc.validate(sr);
@@ -147,5 +155,12 @@ public class ServiceReqForm extends AppCompatActivity implements fbServiceReqAda
         edtDeliveryPlaceTv.setText(sr.getDeliveryPlace());
         edtPropGainTv.setText(String.valueOf(sr.getPropGain()));
         edtContactInfoTv.setText(sr.getContactInfos());
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        edtDateSrvReqTv.removeTextChangedListener(mDateWatcher);
+        edtTimeSrvReqTv.removeTextChangedListener(mTimeWatcher);
     }
 }

@@ -16,6 +16,12 @@
     <string name="insert">insert</string>
     <string name="contact_infos">contact infos</string>
     <string name="my_offer_list">My Offers</string>
+    <string name="svc_offer_list">Received offers</string>
     <string name="my_offers">My offers</string>
     <string name="sign_out">Sign Out</string>
+    <string name="proposed_gain_offer">cost:</string>
+    <string name="set_status">set status</string>
+    <string name="when_str">when:</string>
+    <string name="where_str">where:</string>
+    <string name="accepted_str">Accepted</string>
 </resources>

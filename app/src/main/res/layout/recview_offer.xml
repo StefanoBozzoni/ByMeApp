@@ -4,92 +4,137 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp">
+    app:cardCornerRadius="10dp"
+    android:elevation="10dp"
+    android:layout_margin="16dp">
 
     <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="137dp"
+        android:background="#c79dd5f6">
 
         <TextView
             android:id="@+id/serviceDescr_tv"
-            android:layout_width="335dp"
-            android:layout_height="27dp"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
+            android:background="#de8cc9f5"
+            android:fontFamily="@font/roboto"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline"
             android:textColor="#DE000000"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="service request description" />
 
         <TextView
             android:id="@+id/deliveryPlace_tv"
-            android:layout_width="122dp"
-            android:layout_height="20dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="22dp"
+            android:layout_marginStart="4dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@android:color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/serviceDescr_tv" />
+            app:layout_constraintBottom_toBottomOf="@+id/when_lbl"
+            app:layout_constraintStart_toEndOf="@+id/when_lbl"
+            app:layout_constraintTop_toTopOf="@+id/when_lbl"
+            tools:text="delivery place" />
 
         <TextView
             android:id="@+id/proposedGain_tv"
-            android:layout_width="125dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
+            android:layout_width="48dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="4dp"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="#8A000000"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/proposedGain_lbl"
             app:layout_constraintStart_toEndOf="@+id/proposedGain_lbl"
-            app:layout_constraintTop_toBottomOf="@+id/deliveryTime_tv" />
+            app:layout_constraintTop_toTopOf="@+id/proposedGain_lbl"
+            tools:text="10 $" />
 
         <TextView
             android:id="@+id/deliveryTime_tv"
-            android:layout_width="126dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="4dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="#8A000000"
-            app:layout_constraintStart_toEndOf="@+id/deliveryPlace_tv"
-            app:layout_constraintTop_toBottomOf="@+id/serviceDescr_tv" />
+            android:layout_width="wrap_content"
+            android:layout_height="22dp"
+            android:layout_marginStart="4dp"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/deliveryDate_tv"
+            app:layout_constraintStart_toEndOf="@+id/deliveryDate_tv"
+            app:layout_constraintTop_toTopOf="@+id/deliveryDate_tv"
+            tools:text="time" />
+
+        <TextView
+            android:id="@+id/deliveryDate_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="22dp"
+            android:layout_marginStart="4dp"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/where_lbl"
+            app:layout_constraintStart_toEndOf="@+id/where_lbl"
+            app:layout_constraintTop_toTopOf="@+id/where_lbl"
+            tools:text="date" />
 
         <Button
             android:id="@+id/status_btn"
             style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="60dp"
-            android:layout_height="41dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="96dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/button_bgrnd"
             android:foreground="?android:attr/selectableItemBackground"
             android:minWidth="0dp"
             android:paddingEnd="8dp"
             android:paddingStart="8dp"
-            android:text="status"
+            android:text="@string/set_status"
             android:textColor="#DE000000"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/proposedGain_tv"
+            app:layout_constraintVertical_bias="0.636" />
 
         <TextView
             android:id="@+id/proposedGain_lbl"
-            android:layout_width="122dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:text="planned gain:"
+            android:layout_width="46dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/proposed_gain_offer"
             android:textAlignment="viewStart"
             android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/deliveryPlace_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/when_lbl" />
+
+        <TextView
+            android:id="@+id/where_lbl"
+            android:layout_width="46dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="16dp"
+            android:text="@string/when_str"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="@+id/deliveryPlace_tv"
+            app:layout_constraintStart_toEndOf="@+id/deliveryPlace_tv"
+            app:layout_constraintTop_toTopOf="@+id/deliveryPlace_tv"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/when_lbl"
+            android:layout_width="46dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/where_str"
+            android:textAlignment="viewStart"
+            android:textColor="@android:color/black"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/serviceDescr_tv" />
+
 
     </android.support.constraint.ConstraintLayout>
 

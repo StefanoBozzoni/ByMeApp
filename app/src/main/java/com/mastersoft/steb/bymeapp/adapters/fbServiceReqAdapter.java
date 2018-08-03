@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseUser;
 import com.mastersoft.steb.bymeapp.Constants;
 import com.mastersoft.steb.bymeapp.OfferFormActivity;
 import com.mastersoft.steb.bymeapp.OfferListActivity;
@@ -23,12 +24,12 @@ import com.mastersoft.steb.bymeapp.model.ServiceReq;
 public class fbServiceReqAdapter  extends FirebaseRecyclerAdapter<ServiceReq,fbServiceReqAdapter.VHServiceReq>{
 
     //private Context rcContext;
-    private int mCallerParam;
+    private int     mCallerParam;
+    private String  mUserId;
 
     public interface Completation {
         void onComplete(ServiceReq sr);
     }
-
 
     /**
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
@@ -41,7 +42,7 @@ public class fbServiceReqAdapter  extends FirebaseRecyclerAdapter<ServiceReq,fbS
         mCallerParam=callerParam;
     }
 
-    public class VHServiceReq extends RecyclerView.ViewHolder {
+    class VHServiceReq extends RecyclerView.ViewHolder {
 
         final TextView shortDescriptionTv;
         final TextView largedescriptionTv;
@@ -64,7 +65,10 @@ public class fbServiceReqAdapter  extends FirebaseRecyclerAdapter<ServiceReq,fbS
                         Intent anIntent = new Intent(cntx, OfferFormActivity.class);
                         String key = getRef(pos).getKey();
                         anIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        anIntent.putExtra(Constants.OFFER_FORM_PARAM, Constants.SR_ADD_OFFER);
                         anIntent.putExtra(Constants.SERVICE_KEY, key);
+                        if (!mUserId.equals(""))
+                            anIntent.putExtra(Constants.USER_ID, mUserId);
                         cntx.startActivity(anIntent);
                     }
                 });
@@ -132,6 +136,10 @@ public class fbServiceReqAdapter  extends FirebaseRecyclerAdapter<ServiceReq,fbS
             holder.actionButton.setText("add offer");
         else
             holder.actionButton.setText("see offers");
+    }
+
+    public void setUser(FirebaseUser user) {
+        mUserId = user.getUid();
     }
 
 

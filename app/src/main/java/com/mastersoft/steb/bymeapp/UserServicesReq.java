@@ -17,10 +17,11 @@ import com.mastersoft.steb.bymeapp.model.ServiceReq;
 
 public class UserServicesReq extends AppCompatActivity {
 
-    private RecyclerView    myRecyclerView;
+    RecyclerView            myRecyclerView;
     fbServiceReqAdapter     mServiceReqAdapter;
     LinearLayoutManager     linearLayoutManager;
     int                     mCallerParam;
+    String                  mUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +31,11 @@ public class UserServicesReq extends AppCompatActivity {
         toolbar.setTitle("ByMeApp");
         setSupportActionBar(toolbar);
 
-
         mCallerParam =0;
         Intent callerIntent=getIntent();
         if ((callerIntent.hasExtra(Constants.SERVICE_REQ_PARAM)) && (callerIntent.getExtras()!=null)) {
             mCallerParam = callerIntent.getExtras().getInt(Constants.SERVICE_REQ_PARAM);
+            mUserId      = callerIntent.getExtras().getString(Constants.USER_ID,"");
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -42,6 +43,8 @@ public class UserServicesReq extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(UserServicesReq.this, ServiceReqForm.class);
+                intent.putExtra(Constants.SERVICE_REQ_PARAM,Constants.SR_ADD_SERVICE);
+                intent.putExtra(Constants.USER_ID,mUserId);
                 startActivity(intent);
                 //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 //        .setAction("Action", null).show();
@@ -52,7 +55,7 @@ public class UserServicesReq extends AppCompatActivity {
                 .getReference()
                 .child("ServiceReq")
                 .orderByChild("userID")
-                .equalTo("userIdProva2");
+                .equalTo(mUserId);
 
         FirebaseRecyclerOptions<ServiceReq> options = new FirebaseRecyclerOptions.Builder<ServiceReq>()
                                                           .setQuery(query, ServiceReq.class)
@@ -66,7 +69,6 @@ public class UserServicesReq extends AppCompatActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         myRecyclerView.setLayoutManager(linearLayoutManager);
         myRecyclerView.setAdapter(mServiceReqAdapter);
-
     }
 
     @Override

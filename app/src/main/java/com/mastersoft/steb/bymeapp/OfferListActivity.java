@@ -24,6 +24,7 @@ public class OfferListActivity extends AppCompatActivity {
     private LinearLayoutManager     linearLayoutManager;
     private int                     mCallerParam;
     private String                  mServiceKey;
+    private String                  mUserId;
 
 
     @Override
@@ -43,8 +44,6 @@ public class OfferListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offert_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle(getResources().getString(R.string.my_offer_list));
-        setSupportActionBar(toolbar);
 
         /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -62,26 +61,32 @@ public class OfferListActivity extends AppCompatActivity {
         if ((callerIntent.hasExtra(Constants.OFFER_LIST_PARAM)) && (callerIntent.getExtras()!=null)) {
             mCallerParam = callerIntent.getExtras().getInt(Constants.OFFER_LIST_PARAM);
             mServiceKey  = callerIntent.getExtras().getString(Constants.SERVICE_KEY,"");
+            mUserId      = callerIntent.getExtras().getString(Constants.USER_ID,"");
         }
 
         FirebaseRecyclerOptions<Offer> options=null;
 
         if (mCallerParam==Constants.OF_USER_OFFER) {
+            toolbar.setTitle(getResources().getString(R.string.my_offer_list));
+            setSupportActionBar(toolbar);
+
             Query query = FirebaseDatabase.getInstance()
                     .getReference()
                     .child("Offers")
                     .orderByChild("userID")
-                    .equalTo("userIdProva");
+                    .equalTo(mUserId);
 
             options = new FirebaseRecyclerOptions.Builder<Offer>()
                     .setQuery(query, Offer.class)
                     .build();
         } else if (mCallerParam==Constants.OF_SRV_OFFER)
         {
+            toolbar.setTitle(getResources().getString(R.string.svc_offer_list));
+            setSupportActionBar(toolbar);
             Query query = FirebaseDatabase.getInstance()
                     .getReference()
                     .child("Offers")
-                    .orderByChild("SerReqID")
+                    .orderByChild("serReqID")
                     .equalTo(mServiceKey);
 
             options = new FirebaseRecyclerOptions.Builder<Offer>()
@@ -90,7 +95,7 @@ public class OfferListActivity extends AppCompatActivity {
         }
 
         if (options!=null) {
-            mOffersAdapter = new fbOffersAdapter(options);
+            mOffersAdapter = new fbOffersAdapter(options,mCallerParam);
             myRecyclerView = findViewById(R.id.offers_rv);
             myRecyclerView.setHasFixedSize(true);
 

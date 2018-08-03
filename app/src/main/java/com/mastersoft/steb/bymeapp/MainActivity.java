@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -20,7 +19,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.mastersoft.steb.bymeapp.adapters.fbServiceReqAdapter;
 import com.mastersoft.steb.bymeapp.model.Offer;
-import com.mastersoft.steb.bymeapp.model.Prova;
 import com.mastersoft.steb.bymeapp.model.ServiceReq;
 
 import java.util.ArrayList;
@@ -92,15 +90,14 @@ public class MainActivity extends AppCompatActivity {
         mDbOffers.child(id).setValue(anOffer);
         Toast.makeText(this, "Offer added", Toast.LENGTH_LONG).show();
         */
-/*
+        /*
         Date d= new Date();
         long milliseconds = d.getTime();
         String id = mDbServReq.push().getKey();
         ServiceReq sr = new ServiceReq("userIdProva2","via del mare 111, roma","Roma","non lo so","è solo una prova di servizio","delivery time",30.10,milliseconds);
         mDbServReq.child(id).setValue(sr);
         Toast.makeText(this, "Service request added", Toast.LENGTH_LONG).show();
-
-*/
+        */
 
 
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -131,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void onUserSignInInitialize(FirebaseUser user) {
         mFbUser=user;
+        mServiceReqAdapter.setUser(user);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         myRecyclerView.setLayoutManager(mLinearLayoutManager);
@@ -148,8 +146,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-
-
     }
 
     @Override
@@ -162,51 +158,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         mServiceReqAdapter.startListening();
-        /*
-        mDbServReq.addChildEventListener(new ChildEventListener() {
-
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                //ServiceReq sr = dataSnapshot.getValue(ServiceReq.class);
-                //srvReqList.add(sr);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-
-        }
-        );
-
-        mDbServReq.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                //
-            }
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                myRecyclerView.setAdapter(mServiceReqAdapter);
-            }
-        });
-
-        */
 
     }
 
@@ -228,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
             //Invoca activity che mostra i servizi dell'utente
             Intent intent = new Intent(this,UserServicesReq.class);
             intent.putExtra(Constants.SERVICE_REQ_PARAM,Constants.SR_SEE_OFFER);
+            intent.putExtra(Constants.USER_ID, mFbUser.getUid());
             startActivity(intent);
             return true;
         }
@@ -236,6 +188,7 @@ public class MainActivity extends AppCompatActivity {
             //Invoca activity che mostra i servizi dell'utente
             Intent intent = new Intent(this,OfferListActivity.class);
             intent.putExtra(Constants.OFFER_LIST_PARAM,Constants.OF_USER_OFFER);
+            intent.putExtra(Constants.USER_ID         ,mFbUser.getUid());
             startActivity(intent);
             return true;
         }
@@ -252,7 +205,6 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==RC_SIGN_IN) {
             if (resultCode==RESULT_OK) {
-                //finish();
             }
 
         }

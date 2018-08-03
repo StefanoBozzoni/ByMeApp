@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,15 +28,19 @@ import butterknife.ButterKnife;
 
 public class OfferFormActivity extends AppCompatActivity implements fbServiceReqAdapter.Completation, fbOffersAdapter.Completation {
     String mKeyService;
-    @BindView(R.id.deliveryDate_et)  TextView deliveryDate_et;
-    @BindView(R.id.deliveryTime_et)  TextView deliveryTime_et;
-    @BindView(R.id.deliveryPlace_et) TextView deliveryPlace_et;
-    @BindView(R.id.proposedGain_et)  TextView proposedGain_et;
-    @BindView(R.id.serviceDescr_lbl) TextView serviceDescr_lbl;
+    @BindView(R.id.deliveryDate_et)  TextView          deliveryDate_et;
+    @BindView(R.id.deliveryTime_et)  TextView          deliveryTime_et;
+    @BindView(R.id.deliveryPlace_et) TextView          deliveryPlace_et;
+    @BindView(R.id.proposedGain_et)  TextView          proposedGain_et;
+    @BindView(R.id.serviceDescr_lbl) TextView          serviceDescr_lbl;
     @BindView(R.id.notes_et)         TextView          notes_et;
     @BindView(R.id.clOfferForm)      CoordinatorLayout coordinatorLayout;
-    private                          DatabaseReference mDbOffer;
+    @BindView(R.id.insertButton)     Button            insertButton;
 
+    private                          MaskWatcher       mDateWatcher;
+    private                          MaskWatcher       mTimeWatcher;
+    private                          DatabaseReference mDbOffer;
+    private                          String            mUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,13 +50,16 @@ public class OfferFormActivity extends AppCompatActivity implements fbServiceReq
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        deliveryDate_et.addTextChangedListener(new MaskWatcher("##/##/##"));
-        deliveryTime_et.addTextChangedListener(new MaskWatcher("##:##"));
+        mDateWatcher = new MaskWatcher("##/##/##");
+        mTimeWatcher = new MaskWatcher("##:##");
+        deliveryDate_et.addTextChangedListener(mDateWatcher);
+        deliveryTime_et.addTextChangedListener(mTimeWatcher);
 
         if (getIntent().hasExtra(Constants.SERVICE_KEY)) {
             Bundle extras = getIntent().getExtras();
             if (extras != null) mKeyService = extras.getString(Constants.SERVICE_KEY);
         }
+
         if (mKeyService!=null)
             ServiceReqController.getServiceReqAtKey(mKeyService, this);
 
@@ -61,15 +69,19 @@ public class OfferFormActivity extends AppCompatActivity implements fbServiceReq
 
         int mCallerParam=0;
         String mOfferKey="";
+        //activity called in insert mode
         if ((callerIntent.hasExtra(Constants.OFFER_FORM_PARAM)) && (callerIntent.getExtras()!=null)) {
             mCallerParam = callerIntent.getExtras().getInt(Constants.OFFER_FORM_PARAM);
             mOfferKey    = callerIntent.getExtras().getString(Constants.OFFER_KEY);
+            mUserId      = callerIntent.getExtras().getString(Constants.USER_ID,"");
         }
 
+        //activity called in view mode
         if (mCallerParam==Constants.OF_VIEW_OFFER_FORM) {
             DisableEdits();
-            LoadDbValues(mOfferKey); //TODO: KEY IS ALWAYS ""
-            //insertButton.setVisibility(View.INVISIBLE);
+            if (mOfferKey!=null)
+                loadDbValues(mOfferKey);
+            insertButton.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -82,7 +94,7 @@ public class OfferFormActivity extends AppCompatActivity implements fbServiceReq
             notes_et.setEnabled(false);
     }
 
-    private void LoadDbValues(String key) {
+    private void loadDbValues(String key) {
             if (!key.trim().equals("")) {
                 OfferController.getOfferAtKey(key, this);
             }
@@ -98,9 +110,39 @@ public class OfferFormActivity extends AppCompatActivity implements fbServiceReq
 
     @Override
     public void onComplete(Offer of) {
+        TextView serviceDescr_lbl=findViewById(R.id.serviceDescr_lbl);
+        if (of!=null) {
+            //serviceDescr_lbl.setText(of.getShortDescr());
+            deliveryDate_et.setText(of.getDeliveryDate());
+            deliveryTime_et.setText(of.getDeliveryTime());
+            deliveryPlace_et.setText(of.getDeliveryPlace());
+            proposedGain_et.setText(String.valueOf(of.getPropGain()));
+            notes_et.setText(of.getNotes());
+            if (mKeyService==null) {
+                mKeyService = of.getSerReqID();
+                if (mKeyService!=null)
+                    ServiceReqController.getServiceReqAtKey(mKeyService, this);
+            }
+
+        }
+
+
 
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        deliveryDate_et.removeTextChangedListener(mDateWatcher);
+        deliveryTime_et.removeTextChangedListener(mTimeWatcher);
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
 
     public void InsertDB_BtnClick(View view) {
 
@@ -129,13 +171,15 @@ public class OfferFormActivity extends AppCompatActivity implements fbServiceReq
 
         Date d= new Date();
         long timestamp = d.getTime();
-        Offer sr = new Offer("userIdProva",
-                mKeyService,
-                serviceDescr,
-                deliveryPlace,
-                offerDate+offerTime,
-                propGain,
-                notes);
+        Offer sr = new Offer(mUserId,
+                             mKeyService,
+                             serviceDescr,
+                             deliveryPlace,
+                             offerDate,
+                             offerTime,
+                             propGain,
+                             notes,
+                            "");
 
         OfferController of=(new OfferController());
         OfferController.Error se = of.validate(sr);
@@ -151,6 +195,7 @@ public class OfferFormActivity extends AppCompatActivity implements fbServiceReq
         String id = mDbOffer.push().getKey();
         if (id!=null) mDbOffer.child(id).setValue(sr);
         Toast.makeText(this, "Offer added", Toast.LENGTH_LONG).show();
+        onBackPressed();
 
     }
 }
