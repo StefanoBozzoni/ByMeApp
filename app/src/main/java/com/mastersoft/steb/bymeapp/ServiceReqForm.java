@@ -1,6 +1,8 @@
 package com.mastersoft.steb.bymeapp;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
@@ -13,7 +15,7 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.mastersoft.steb.bymeapp.Controllers.ServiceReqController;
+import com.mastersoft.steb.bymeapp.controllers.ServiceReqController;
 import com.mastersoft.steb.bymeapp.adapters.fbServiceReqAdapter;
 import com.mastersoft.steb.bymeapp.model.ServiceReq;
 import com.mastersoft.steb.bymeapp.utils.MaskWatcher;
@@ -75,6 +77,7 @@ public class ServiceReqForm extends AppCompatActivity implements fbServiceReqAda
     }
 
     private void DisableEdits() {
+        /*
         edtServiceShortDescrTv.setEnabled(false);
         edtServiceDescrTv.setEnabled(false);
         edtDateSrvReqTv.setEnabled(false);
@@ -83,6 +86,17 @@ public class ServiceReqForm extends AppCompatActivity implements fbServiceReqAda
         edtDeliveryPlaceTv.setEnabled(false);
         edtPropGainTv.setEnabled(false);
         edtContactInfoTv.setEnabled(false);
+        */
+
+        disableEditText(edtServiceShortDescrTv);
+        disableEditText(edtServiceDescrTv);
+        disableEditText(edtDateSrvReqTv);
+        disableEditText(edtTimeSrvReqTv);
+        disableEditText(edtPerformPlaceTv);
+        disableEditText(edtDeliveryPlaceTv);
+        disableEditText(edtPropGainTv);
+        disableEditText(edtContactInfoTv);
+
     }
 
     private void LoadDbValues(String key) {
@@ -149,7 +163,7 @@ public class ServiceReqForm extends AppCompatActivity implements fbServiceReqAda
     public void onComplete(ServiceReq sr) {
         edtServiceShortDescrTv.setText(sr.getShortDescr());
         edtServiceDescrTv.setText(sr.getDescription());
-        edtDateSrvReqTv.setText(sr.getDeliveryTime());
+        edtDateSrvReqTv.setText(sr.getDeliveryDate());
         edtTimeSrvReqTv.setText(sr.getDeliveryTime());
         edtPerformPlaceTv.setText(sr.getPerfPlace());
         edtDeliveryPlaceTv.setText(sr.getDeliveryPlace());
@@ -162,5 +176,15 @@ public class ServiceReqForm extends AppCompatActivity implements fbServiceReqAda
         super.onStop();
         edtDateSrvReqTv.removeTextChangedListener(mDateWatcher);
         edtTimeSrvReqTv.removeTextChangedListener(mTimeWatcher);
+    }
+
+
+    private void disableEditText(EditText editText) {
+        editText.setFocusable(false);
+        //editText.setEnabled(false);
+        editText.setCursorVisible(false);
+        editText.setKeyListener(null);
+        //editText.setBackgroundColor(Color.TRANSPARENT);
+        editText.getBackground().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
     }
 }

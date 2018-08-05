@@ -1,4 +1,4 @@
-package com.mastersoft.steb.bymeapp.Controllers;
+package com.mastersoft.steb.bymeapp.controllers;
 
 import android.support.annotation.NonNull;
 
@@ -28,7 +28,7 @@ public class ServiceReqController {
 
     public ServiceReqController() {};
 
-    public static Error validate(ServiceReq sr){
+    public Error validate(ServiceReq sr){
         if (sr.getShortDescr().trim().equals("")) {
             return new Error(10,"short service description can't be void");
         }
@@ -51,7 +51,7 @@ public class ServiceReqController {
 
         databaseRef.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
                 ServiceReq sr = snapshot.getValue(ServiceReq.class);
                 c.onComplete(sr);
             }

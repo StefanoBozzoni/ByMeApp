@@ -24,4 +24,9 @@
     <string name="when_str">when:</string>
     <string name="where_str">where:</string>
     <string name="accepted_str">Accepted</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+    <string name="last_5_requests">Last 5 requests:</string>
+    <string name="gain_str">gain:</string>
+    <string name="currency_symbol">$</string>
 </resources>

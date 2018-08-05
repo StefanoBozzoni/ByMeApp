@@ -17,11 +17,12 @@ import com.mastersoft.steb.bymeapp.model.ServiceReq;
 
 public class UserServicesReq extends AppCompatActivity {
 
-    RecyclerView            myRecyclerView;
+    MyRecyclerView          myRecyclerView;
     fbServiceReqAdapter     mServiceReqAdapter;
     LinearLayoutManager     linearLayoutManager;
     int                     mCallerParam;
     String                  mUserId;
+    private MyRecyclerView.AdapterDataObserver mDataObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,9 +60,19 @@ public class UserServicesReq extends AppCompatActivity {
 
         FirebaseRecyclerOptions<ServiceReq> options = new FirebaseRecyclerOptions.Builder<ServiceReq>()
                                                           .setQuery(query, ServiceReq.class)
+                                                          .setLifecycleOwner(this)
                                                           .build();
 
         mServiceReqAdapter = new fbServiceReqAdapter(options,Constants.SR_SEE_OFFER);
+
+        mDataObserver = new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                myRecyclerView.restoreScrollPosition();
+            }
+        };
+
+        mServiceReqAdapter.registerAdapterDataObserver(mDataObserver);
         myRecyclerView     = findViewById(R.id.serviceReq_rv);
         myRecyclerView.setHasFixedSize(true);
 
@@ -72,14 +83,14 @@ public class UserServicesReq extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        mServiceReqAdapter.startListening();
+    protected void onSaveInstanceState(Bundle outState) {
+        myRecyclerView.storeScrollPosition();
+        super.onSaveInstanceState(outState);
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        mServiceReqAdapter.stopListening();
+    protected void onDestroy() {
+        mServiceReqAdapter.unregisterAdapterDataObserver(mDataObserver);
+        super.onDestroy();
     }
 }

@@ -1,4 +1,4 @@
-package com.mastersoft.steb.bymeapp.Controllers;
+package com.mastersoft.steb.bymeapp.controllers;
 
 import android.support.annotation.NonNull;
 
@@ -8,9 +8,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mastersoft.steb.bymeapp.adapters.fbOffersAdapter;
-import com.mastersoft.steb.bymeapp.adapters.fbServiceReqAdapter;
 import com.mastersoft.steb.bymeapp.model.Offer;
-import com.mastersoft.steb.bymeapp.model.ServiceReq;
 
 public class OfferController {
 
@@ -28,7 +26,7 @@ public class OfferController {
 
     public OfferController() {};
 
-    public static OfferController.Error validate(Offer of){
+    public OfferController.Error validate(Offer of){
         if (of.getServiceDescr().trim().equals("")) {
             return new OfferController.Error(10,"short service description can't be void in offer data");
         }
@@ -56,7 +54,7 @@ public class OfferController {
 
         databaseRef.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Offer of = snapshot.getValue(Offer.class);
                 c.onComplete(of);
             }

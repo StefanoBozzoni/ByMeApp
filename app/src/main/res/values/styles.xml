@@ -17,6 +17,8 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:textViewStyle">@style/ByMeAppTextViewStyle</item>
+        <item name="android:editTextStyle">@style/ByMeAppTextViewStyle</item>
     </style>
 
     <style name="ByMeAppTextViewStyle" parent="android:Widget.TextView">

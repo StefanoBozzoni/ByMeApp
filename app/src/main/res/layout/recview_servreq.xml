@@ -1,62 +1,144 @@
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:elevation="8dp"
+    app:cardElevation="10dp"
     android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
     android:layout_marginStart="8dp"
     android:layout_marginEnd="8dp">
 
     <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="#bceddc">
+
+        <TextView
+            android:id="@+id/when_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:text="@string/when_str"
+            android:textAlignment="viewStart"
+            app:layout_constraintBottom_toBottomOf="@+id/deliveryPlace_tv"
+            app:layout_constraintStart_toEndOf="@+id/deliveryPlace_tv"
+            app:layout_constraintTop_toTopOf="@+id/deliveryPlace_tv" />
+
+        <TextView
+            android:id="@+id/gain_lbl"
+            android:layout_width="46dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/gain_str"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/where_lbl" />
+
+        <TextView
+            android:id="@+id/where_lbl"
+            android:layout_width="46dp"
+            android:layout_height="22dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="@string/where_str"
+            android:textAlignment="viewStart"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/descr_small_tv" />
 
         <TextView
             android:id="@+id/descr_small_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textColor="#DE000000"
+            android:background="#98d6c0"
             android:textSize="18sp"
-            app:layout_constraintEnd_toStartOf="@+id/action_button_1"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="short description" />
+
+        <TextView
+            android:id="@+id/deliveryTime_tv"
+            android:layout_width="60dp"
+            android:layout_height="21dp"
+            android:layout_marginStart="4dp"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintBottom_toBottomOf="@+id/deliveryDate_tv"
+            app:layout_constraintStart_toEndOf="@+id/deliveryDate_tv"
+            app:layout_constraintTop_toTopOf="@+id/deliveryDate_tv"
+            tools:text="time" />
+
+        <TextView
+            android:id="@+id/deliveryDate_tv"
+            android:layout_width="60dp"
+            android:layout_height="21dp"
+            android:layout_marginStart="4dp"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintBottom_toBottomOf="@+id/when_lbl"
+            app:layout_constraintStart_toEndOf="@+id/when_lbl"
+            app:layout_constraintTop_toTopOf="@+id/when_lbl"
+            tools:text="date" />
+
+        <TextView
+            android:id="@+id/deliveryPlace_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:textAlignment="textStart"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            app:layout_constraintBottom_toBottomOf="@+id/where_lbl"
+            app:layout_constraintStart_toEndOf="@+id/where_lbl"
+            app:layout_constraintTop_toTopOf="@+id/where_lbl"
+            tools:text="delivery_location" />
 
         <TextView
             android:id="@+id/descr_large_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="#8A000000"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/action_button_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/descr_small_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/gain_lbl"
+            tools:text="description of service request" />
 
         <Button
             android:id="@+id/action_button_1"
             style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="60dp"
-            android:layout_height="41dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="90dp"
+            android:layout_height="37dp"
+            android:layout_margin="8dp"
             android:background="@drawable/button_bgrnd"
+            android:foreground="?android:attr/selectableItemBackground"
             android:minWidth="0dp"
             android:paddingEnd="8dp"
             android:paddingStart="8dp"
             android:text="@string/add_offer"
-            android:textColor="#DE000000"
-            android:foreground="?android:attr/selectableItemBackground"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/descr_large_tv" />
+
+        <TextView
+            android:id="@+id/gain_tv"
+            android:layout_width="36dp"
+            android:layout_height="23dp"
+            android:layout_marginStart="4dp"
+            android:textAlignment="textStart"
+            app:layout_constraintBottom_toBottomOf="@+id/gain_lbl"
+            app:layout_constraintStart_toEndOf="@+id/gain_lbl"
+            app:layout_constraintTop_toTopOf="@+id/gain_lbl"
+            tools:text="10$" />
 
     </android.support.constraint.ConstraintLayout>
 

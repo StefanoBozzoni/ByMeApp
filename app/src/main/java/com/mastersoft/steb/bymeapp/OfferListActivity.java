@@ -19,25 +19,13 @@ import com.mastersoft.steb.bymeapp.model.Offer;
 import com.mastersoft.steb.bymeapp.model.ServiceReq;
 
 public class OfferListActivity extends AppCompatActivity {
-    private RecyclerView            myRecyclerView;
+    private MyRecyclerView          myRecyclerView;
     private fbOffersAdapter         mOffersAdapter;
     private LinearLayoutManager     linearLayoutManager;
     private int                     mCallerParam;
     private String                  mServiceKey;
     private String                  mUserId;
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mOffersAdapter.startListening();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mOffersAdapter.stopListening();
-    }
+    private RecyclerView.AdapterDataObserver mDataObserver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +66,7 @@ public class OfferListActivity extends AppCompatActivity {
 
             options = new FirebaseRecyclerOptions.Builder<Offer>()
                     .setQuery(query, Offer.class)
+                    .setLifecycleOwner(this)
                     .build();
         } else if (mCallerParam==Constants.OF_SRV_OFFER)
         {
@@ -96,6 +85,16 @@ public class OfferListActivity extends AppCompatActivity {
 
         if (options!=null) {
             mOffersAdapter = new fbOffersAdapter(options,mCallerParam);
+
+            mDataObserver = new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onItemRangeInserted(int positionStart, int itemCount) {
+                    myRecyclerView.restoreScrollPosition();
+                }
+            };
+
+            mOffersAdapter.registerAdapterDataObserver(mDataObserver);
+
             myRecyclerView = findViewById(R.id.offers_rv);
             myRecyclerView.setHasFixedSize(true);
 
@@ -104,5 +103,17 @@ public class OfferListActivity extends AppCompatActivity {
             myRecyclerView.setLayoutManager(linearLayoutManager);
             myRecyclerView.setAdapter(mOffersAdapter);
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        myRecyclerView.storeScrollPosition();
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        mOffersAdapter.unregisterAdapterDataObserver(mDataObserver);
+        super.onDestroy();
     }
 }

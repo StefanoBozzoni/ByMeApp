@@ -8,7 +8,7 @@
     tools:context=".OfferListActivity"
     tools:showIn="@layout/activity_offert_list">
 
-    <android.support.v7.widget.RecyclerView
+    <com.mastersoft.steb.bymeapp.MyRecyclerView
         android:id="@+id/offers_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

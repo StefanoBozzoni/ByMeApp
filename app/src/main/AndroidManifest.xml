@@ -37,11 +37,22 @@
             android:name=".OfferFormActivity"
             android:label="prova2"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".OfferStatusFormActivity"></activity>
+
+        <activity android:name=".OfferStatusFormActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <receiver android:name=".widgets.ByMeAppWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/by_me_app_widget_info" />
+        </receiver>
     </application>
 
 </manifest>

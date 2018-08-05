@@ -21,11 +21,15 @@ import com.mastersoft.steb.bymeapp.R;
 import com.mastersoft.steb.bymeapp.ServiceReqForm;
 import com.mastersoft.steb.bymeapp.model.ServiceReq;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class fbServiceReqAdapter  extends FirebaseRecyclerAdapter<ServiceReq,fbServiceReqAdapter.VHServiceReq>{
 
     //private Context rcContext;
     private int     mCallerParam;
     private String  mUserId;
+    private  Context cntx;
 
     public interface Completation {
         void onComplete(ServiceReq sr);
@@ -44,24 +48,25 @@ public class fbServiceReqAdapter  extends FirebaseRecyclerAdapter<ServiceReq,fbS
 
     class VHServiceReq extends RecyclerView.ViewHolder {
 
-        final TextView shortDescriptionTv;
-        final TextView largedescriptionTv;
-        final Button   actionButton;
+        @BindView(R.id.descr_small_tv)   TextView shortDescriptionTv;
+        @BindView(R.id.deliveryPlace_tv) TextView deliveryPlaceTv;
+        @BindView(R.id.deliveryDate_tv)  TextView deliveryDateTv;
+        @BindView(R.id.deliveryTime_tv)  TextView deliveryTimeTv;
+        @BindView(R.id.gain_tv)          TextView gainTv;
+        @BindView(R.id.descr_large_tv)   TextView largedescriptionTv;
+
+        @BindView(R.id.action_button_1)  TextView actionButton;
 
         VHServiceReq(final View view) {
             super(view);
-            shortDescriptionTv = view.findViewById(R.id.descr_small_tv);
-            largedescriptionTv = view.findViewById(R.id.descr_large_tv);
-            actionButton       = view.findViewById(R.id.action_button_1);
+            ButterKnife.bind(this,view);
+            cntx = view.getContext();
 
             if (mCallerParam== Constants.SR_ADD_OFFER) {
                 actionButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         int pos = getAdapterPosition();
-                        Context cntx = view.getContext();
-                        //Toast.makeText(cntx, getRef(pos).getKey(), Toast.LENGTH_SHORT).show();
-
                         Intent anIntent = new Intent(cntx, OfferFormActivity.class);
                         String key = getRef(pos).getKey();
                         anIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -78,7 +83,6 @@ public class fbServiceReqAdapter  extends FirebaseRecyclerAdapter<ServiceReq,fbS
                     @Override
                     public void onClick(View v) {
                         int pos = getAdapterPosition();
-                        Context cntx = view.getContext();
                         String key = getRef(pos).getKey();
 
                         Intent anIntent = new Intent(cntx, OfferListActivity.class);
@@ -132,6 +136,12 @@ public class fbServiceReqAdapter  extends FirebaseRecyclerAdapter<ServiceReq,fbS
         //Get the data[position] and load it in the viewholder
         holder.shortDescriptionTv.setText(model.getShortDescr());
         holder.largedescriptionTv.setText(model.getDescription());
+        holder.deliveryPlaceTv.setText(model.getDeliveryPlace());
+        holder.deliveryDateTv.setText(model.getDeliveryDate());
+        holder.deliveryTimeTv.setText(model.getDeliveryTime());
+        String currencySymbol=cntx.getResources().getString(R.string.currency_symbol);
+        holder.gainTv.setText(String.valueOf(model.getPropGain()+" "+currencySymbol ));
+
         if (mCallerParam== Constants.SR_ADD_OFFER)
             holder.actionButton.setText("add offer");
         else

@@ -102,7 +102,6 @@ public class ServiceReq {
         this.shortDescr = shortDescr;
     }
 
-
     public Long getTimeStamp() {
         return timestamp;
     }

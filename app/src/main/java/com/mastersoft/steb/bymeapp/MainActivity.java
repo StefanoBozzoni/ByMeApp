@@ -1,5 +1,6 @@
 package com.mastersoft.steb.bymeapp;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,8 +8,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -25,32 +28,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
-    private DatabaseReference mDbOffers;
-    private DatabaseReference mDbServReq;
 
-    private ArrayList<Offer>  offers;
-    private ServiceReq[]      srvReqList;
-    private RecyclerView      myRecyclerView;
+
+    private MyRecyclerView    myRecyclerView;
     fbServiceReqAdapter       mServiceReqAdapter;
     LinearLayoutManager       mLinearLayoutManager;
     private                   FirebaseAuth mFirebaseAuth;
     private                   FirebaseAuth.AuthStateListener mAuthStateListener;
     private                   FirebaseUser mFbUser;
+    private                   RecyclerView.AdapterDataObserver mDataObserver;
     private static final int  RC_SIGN_IN = 1;
 
+    @Override
+    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        return super.onCreateView(parent, name, context, attrs);
+    }
 
-    /*
-    String id = mDatabaseOffers.push().getKey();
-
-    //creating an Artist Object
-    Prova aProva = new Prova(id, "prova");
-
-    //Saving the Artist
-    mDatabaseOffers.child(id).setValue(aProva);
-
-    //displaying a success toast
-    Toast.makeText(this, "Prova added", Toast.LENGTH_LONG).show();
-    */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,12 +54,6 @@ public class MainActivity extends AppCompatActivity {
         FirebaseDatabase dbInstance=FirebaseDatabase.getInstance();
         mFirebaseAuth       =FirebaseAuth.getInstance();
 
-        mDbOffers  = dbInstance.getReference("Offers");
-        mDbServReq = dbInstance.getReference("ServiceReq");
-
-        offers = new ArrayList<Offer>();
-        srvReqList=null;
-
         Query query = FirebaseDatabase.getInstance()
                 .getReference()
                 .child("ServiceReq")
@@ -74,12 +61,24 @@ public class MainActivity extends AppCompatActivity {
 
         FirebaseRecyclerOptions<ServiceReq> options = new FirebaseRecyclerOptions.Builder<ServiceReq>()
                 .setQuery(query, ServiceReq.class)
+                .setLifecycleOwner(this)
                 .build();
         mServiceReqAdapter = new fbServiceReqAdapter(options,Constants.SR_ADD_OFFER);
 
         myRecyclerView=findViewById(R.id.serviceReq_rv);
-        myRecyclerView.setHasFixedSize(true);
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        myRecyclerView.setLayoutManager(mLinearLayoutManager);
 
+
+        mDataObserver = new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeInserted(int positionStart, int itemCount) {
+                myRecyclerView.restoreScrollPosition();
+            }
+        };
+
+        mServiceReqAdapter.registerAdapterDataObserver(mDataObserver);
 
         //Insert Offers
         /*
@@ -129,9 +128,9 @@ public class MainActivity extends AppCompatActivity {
     private void onUserSignInInitialize(FirebaseUser user) {
         mFbUser=user;
         mServiceReqAdapter.setUser(user);
-        mLinearLayoutManager = new LinearLayoutManager(this);
-        mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        myRecyclerView.setLayoutManager(mLinearLayoutManager);
+        //mLinearLayoutManager = new LinearLayoutManager(this);
+        //mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        //myRecyclerView.setLayoutManager(mLinearLayoutManager);
         myRecyclerView.setAdapter(mServiceReqAdapter);
 
     }
@@ -140,25 +139,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        //mServiceReqAdapter.registerAdapterDataObserver(mDataObserver);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        mServiceReqAdapter.stopListening();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        mServiceReqAdapter.startListening();
-
+        //mServiceReqAdapter.unregisterAdapterDataObserver(mDataObserver);
     }
 
     @Override
@@ -208,5 +196,17 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        myRecyclerView.storeScrollPosition();
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onDestroy() {
+        mServiceReqAdapter.unregisterAdapterDataObserver(mDataObserver);
+        super.onDestroy();
     }
 }

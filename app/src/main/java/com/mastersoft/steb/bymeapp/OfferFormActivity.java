@@ -13,8 +13,8 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.mastersoft.steb.bymeapp.Controllers.OfferController;
-import com.mastersoft.steb.bymeapp.Controllers.ServiceReqController;
+import com.mastersoft.steb.bymeapp.controllers.OfferController;
+import com.mastersoft.steb.bymeapp.controllers.ServiceReqController;
 import com.mastersoft.steb.bymeapp.adapters.fbOffersAdapter;
 import com.mastersoft.steb.bymeapp.adapters.fbServiceReqAdapter;
 import com.mastersoft.steb.bymeapp.model.Offer;
