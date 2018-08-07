@@ -10,6 +10,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.mastersoft.steb.bymeapp.adapters.fbServiceReqAdapter;
 import com.mastersoft.steb.bymeapp.model.ServiceReq;
 
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 public class ServiceReqController {
 
     public static class Error {
@@ -41,6 +44,17 @@ public class ServiceReqController {
             return new Error(30,"service payment should be provided");
         }
 
+        if (!isValidDate(sr.getDeliveryDate(),"dd/mm/yyyy")) {
+            return new Error(40,"delivery date is not a valid date");
+        }
+
+        if ((!isValidDate(sr.getDeliveryTime(),"hh:mm")) ||
+            (!isValidDate(sr.getDeliveryTime(),"hh:mm a")))
+        {
+            return new Error(50,"delivery time is not a valid time");
+        }
+
+
         return new Error(0,"OK");
 
     }
@@ -62,5 +76,19 @@ public class ServiceReqController {
             }
         });
     }
+
+
+    public static boolean isValidDate(String input, String format) {
+        boolean valid = false;
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat(format, Locale.ITALY);
+            //dateFormat.setLenient(false) ;
+            String output = dateFormat.format(dateFormat.parse(input));
+            valid = input.equals(output);
+        } catch (Exception ignore) {}
+
+        return valid;
+    }
+
 }
 

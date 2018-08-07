@@ -1,5 +1,8 @@
 package com.mastersoft.steb.bymeapp;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -29,7 +32,7 @@ public class UserServicesReq extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_services_req_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("ByMeApp");
+        toolbar.setTitle("My services requests");
         setSupportActionBar(toolbar);
 
         mCallerParam =0;
@@ -38,7 +41,7 @@ public class UserServicesReq extends AppCompatActivity {
             mCallerParam = callerIntent.getExtras().getInt(Constants.SERVICE_REQ_PARAM);
             mUserId      = callerIntent.getExtras().getString(Constants.USER_ID,"");
         }
-
+        final Context cntx = this;
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,9 +49,8 @@ public class UserServicesReq extends AppCompatActivity {
                 Intent intent = new Intent(UserServicesReq.this, ServiceReqForm.class);
                 intent.putExtra(Constants.SERVICE_REQ_PARAM,Constants.SR_ADD_SERVICE);
                 intent.putExtra(Constants.USER_ID,mUserId);
-                startActivity(intent);
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                //        .setAction("Action", null).show();
+                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation((Activity)cntx,null);
+                startActivity(intent,options.toBundle());
             }
         });
 
@@ -63,7 +65,7 @@ public class UserServicesReq extends AppCompatActivity {
                                                           .setLifecycleOwner(this)
                                                           .build();
 
-        mServiceReqAdapter = new fbServiceReqAdapter(options,Constants.SR_SEE_OFFER);
+        mServiceReqAdapter = new fbServiceReqAdapter(options,Constants.SR_SEE_OFFER, this);
 
         mDataObserver = new RecyclerView.AdapterDataObserver() {
             @Override

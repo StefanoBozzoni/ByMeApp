@@ -65,6 +65,8 @@ public class MyRecyclerView extends RecyclerView {
         return rvTag;
     }
 
+
+
     public void  restoreScrollPosition() {
         LayoutManager lm = this.getLayoutManager();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());

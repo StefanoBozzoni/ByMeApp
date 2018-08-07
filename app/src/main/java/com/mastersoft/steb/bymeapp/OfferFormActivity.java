@@ -1,6 +1,8 @@
 package com.mastersoft.steb.bymeapp;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,12 +31,12 @@ import butterknife.ButterKnife;
 
 public class OfferFormActivity extends AppCompatActivity implements fbServiceReqAdapter.Completation, fbOffersAdapter.Completation {
     String mKeyService;
-    @BindView(R.id.deliveryDate_et)  TextView          deliveryDate_et;
-    @BindView(R.id.deliveryTime_et)  TextView          deliveryTime_et;
-    @BindView(R.id.deliveryPlace_et) TextView          deliveryPlace_et;
-    @BindView(R.id.proposedGain_et)  TextView          proposedGain_et;
+    @BindView(R.id.deliveryDate_et)  EditText          deliveryDate_et;
+    @BindView(R.id.deliveryTime_et)  EditText          deliveryTime_et;
+    @BindView(R.id.deliveryPlace_et) EditText          deliveryPlace_et;
+    @BindView(R.id.proposedGain_et)  EditText          proposedGain_et;
     @BindView(R.id.serviceDescr_lbl) TextView          serviceDescr_lbl;
-    @BindView(R.id.notes_et)         TextView          notes_et;
+    @BindView(R.id.notes_et)         EditText          notes_et;
     @BindView(R.id.clOfferForm)      CoordinatorLayout coordinatorLayout;
     @BindView(R.id.insertButton)     Button            insertButton;
 
@@ -86,12 +89,11 @@ public class OfferFormActivity extends AppCompatActivity implements fbServiceReq
     }
 
     private void DisableEdits() {
-            deliveryDate_et.setEnabled(false);
-            deliveryTime_et.setEnabled(false);
-            deliveryPlace_et.setEnabled(false);
-            proposedGain_et.setEnabled(false);
-            serviceDescr_lbl.setEnabled(false);
-            notes_et.setEnabled(false);
+            disableEditText(deliveryDate_et);
+            disableEditText(deliveryTime_et);
+            disableEditText(deliveryPlace_et);
+            disableEditText(proposedGain_et);
+            disableEditText(notes_et);
     }
 
     private void loadDbValues(String key) {
@@ -112,7 +114,6 @@ public class OfferFormActivity extends AppCompatActivity implements fbServiceReq
     public void onComplete(Offer of) {
         TextView serviceDescr_lbl=findViewById(R.id.serviceDescr_lbl);
         if (of!=null) {
-            //serviceDescr_lbl.setText(of.getShortDescr());
             deliveryDate_et.setText(of.getDeliveryDate());
             deliveryTime_et.setText(of.getDeliveryTime());
             deliveryPlace_et.setText(of.getDeliveryPlace());
@@ -123,11 +124,7 @@ public class OfferFormActivity extends AppCompatActivity implements fbServiceReq
                 if (mKeyService!=null)
                     ServiceReqController.getServiceReqAtKey(mKeyService, this);
             }
-
         }
-
-
-
     }
 
 
@@ -187,7 +184,11 @@ public class OfferFormActivity extends AppCompatActivity implements fbServiceReq
         if (se.getErrorCode()!=0) {
             Snackbar snackbar = Snackbar
                     .make(coordinatorLayout, se.getErrorDescription(), Snackbar.LENGTH_LONG);
+            View viewSb = snackbar.getView();
+            TextView tv = (TextView) viewSb.findViewById(android.support.design.R.id.snackbar_text);
+            tv.setTextColor(Color.WHITE);
             snackbar.show();
+
             return;
         }
 
@@ -198,5 +199,13 @@ public class OfferFormActivity extends AppCompatActivity implements fbServiceReq
         onBackPressed();
 
     }
+
+    private void disableEditText(EditText editText) {
+        editText.setFocusable(false);
+        editText.setCursorVisible(false);
+        editText.setKeyListener(null);
+        editText.getBackground().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
+    }
+
 }
 

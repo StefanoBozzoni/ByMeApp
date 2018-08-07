@@ -8,8 +8,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.RemoteViews;
-
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -29,8 +27,6 @@ import java.util.ArrayList;
 public class ByMeAppWidget extends AppWidgetProvider {
 
     private static DatabaseReference  mDbServReq;
-    private static FirebaseAuth       mFirebaseAuth;
-    FirebaseDatabase                  dbInstance;
     private static ChildEventListener mChildEventListener;
     private static ValueEventListener mEventListner;
 
@@ -39,15 +35,12 @@ public class ByMeAppWidget extends AppWidgetProvider {
 
         // Construct the RemoteViews object
         final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_byme_app);
-        final ArrayList<ServiceReq> srvcReq = new ArrayList<ServiceReq>();
+        final ArrayList<ServiceReq> srvcReq = new ArrayList<>();
 
         FirebaseDatabase dbInstance = FirebaseDatabase.getInstance();
         mDbServReq      = dbInstance.getReference("ServiceReq");
-        mFirebaseAuth   = FirebaseAuth.getInstance();
-        Query q=null;
-        if (mDbServReq!=null)
-            q=mDbServReq.orderByChild("timestamp").limitToLast(5);
-
+        //mFirebaseAuth   = FirebaseAuth.getInstance();
+        Query q = mDbServReq.orderByChild("timestamp").limitToLast(5);
 
         if (mChildEventListener==null) {
             mChildEventListener = new ChildEventListener() {
@@ -76,8 +69,7 @@ public class ByMeAppWidget extends AppWidgetProvider {
                 public void onCancelled(@NonNull DatabaseError databaseError) {
                 }
             };
-            if (q!=null)
-               q.addChildEventListener(mChildEventListener);
+            q.addChildEventListener(mChildEventListener);
         }
 
         if (mEventListner==null) {
@@ -104,8 +96,10 @@ public class ByMeAppWidget extends AppWidgetProvider {
                                     sb.append(descr);
                                     sb.append("\r\n");
                                 }
-                                views.setTextViewText(R.id.appwidget_text, sb.toString());
-                                appWidgetManager.updateAppWidget(appWidgetId, views);
+                                if (!sb.toString().trim().equals("")) {
+                                    views.setTextViewText(R.id.appwidget_text, sb.toString());
+                                    appWidgetManager.updateAppWidget(appWidgetId, views);
+                                }
                             }
                         }).start();
                     }
@@ -116,8 +110,7 @@ public class ByMeAppWidget extends AppWidgetProvider {
 
                 }
             };
-            if (q!=null)
-               q.addValueEventListener(mEventListner);
+            q.addValueEventListener(mEventListner);
         }
 
         Intent i= new Intent(context, MainActivity.class);

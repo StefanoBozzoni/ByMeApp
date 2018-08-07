@@ -13,8 +13,8 @@
         android:text="@string/last_5_requests"
         android:textAlignment="center"
         android:textColor="@android:color/black"
-        android:background="@color/secondaryLightColor2"
-        android:textSize="18sp"
+        android:background="@color/colorAccentLight2"
+        android:textSize="@dimen/textSize_24sp"
         android:textStyle="bold" />
 
 
@@ -24,12 +24,12 @@
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:layout_margin="8dp"
+        android:layout_margin="@dimen/margin_8dp"
         android:background="@color/colorPrimaryLight2"
-        android:contentDescription="@string/appwidget_text"
+        android:contentDescription="@string/widget_services_lists_contentDescription"
         android:fontFamily="@font/roboto"
         android:textColor="@android:color/black"
-        android:textSize="16sp"
+        android:textSize="@dimen/textSize_18sp"
         android:textStyle="italic"
         android:layout_below="@id/title"/>
 

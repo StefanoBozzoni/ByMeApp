@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.mastersoft.steb.bymeapp">
-
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -11,6 +10,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -21,21 +21,25 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".UserServicesReq"
             android:label="@string/title_activity_user_services_req"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".ServiceReqForm"
             android:label="@string/title_service_req_form"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustResize" />
+
         <activity
             android:name=".OfferListActivity"
+            android:label="@string/offers_str"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".OfferFormActivity"
-            android:label="prova2"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <activity android:name=".OfferStatusFormActivity" />
@@ -53,6 +57,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/by_me_app_widget_info" />
         </receiver>
+
     </application>
 
 </manifest>

@@ -4,59 +4,59 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:elevation="8dp"
+    android:elevation="@dimen/margin_8dp"
     app:cardElevation="10dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
-    android:layout_marginStart="8dp"
-    android:layout_marginEnd="8dp">
+    android:layout_margin="@dimen/margin_8dp">
 
     <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#bceddc">
+        android:background="@color/secondaryLightColor">
 
         <TextView
             android:id="@+id/when_lbl"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:text="@string/when_str"
-            android:textAlignment="viewStart"
-            app:layout_constraintBottom_toBottomOf="@+id/deliveryPlace_tv"
-            app:layout_constraintStart_toEndOf="@+id/deliveryPlace_tv"
-            app:layout_constraintTop_toTopOf="@+id/deliveryPlace_tv" />
-
-        <TextView
-            android:id="@+id/gain_lbl"
-            android:layout_width="46dp"
-            android:layout_height="22dp"
+            android:layout_height="@dimen/textHeight_24dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="@string/gain_str"
+            android:text="@string/when_str"
+            android:textAlignment="viewStart"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/where_lbl" />
 
         <TextView
+            android:id="@+id/gain_lbl"
+            android:layout_width="46dp"
+            android:layout_height="@dimen/textHeight_24dp"
+            android:layout_marginStart="8dp"
+            android:text="@string/gain_str"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/deliveryTime_tv"
+            app:layout_constraintStart_toEndOf="@+id/deliveryTime_tv"
+            app:layout_constraintTop_toTopOf="@+id/deliveryTime_tv" />
+
+        <TextView
             android:id="@+id/where_lbl"
             android:layout_width="46dp"
-            android:layout_height="22dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_height="@dimen/textHeight_24dp"
+            android:layout_marginStart="@dimen/margin_8dp"
+            android:layout_marginTop="@dimen/margin_8dp"
             android:text="@string/where_str"
             android:textAlignment="viewStart"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/descr_small_tv" />
 
         <TextView
             android:id="@+id/descr_small_tv"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="#98d6c0"
-            android:textSize="18sp"
+            android:layout_height="@dimen/textHeight_25dp"
+            android:layout_marginEnd="@dimen/margin_8dp"
+            android:layout_marginStart="@dimen/margin_8dp"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:background="@color/secondaryColor"
+            android:textSize="@dimen/textSize_18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -65,32 +65,32 @@
         <TextView
             android:id="@+id/deliveryTime_tv"
             android:layout_width="60dp"
-            android:layout_height="21dp"
-            android:layout_marginStart="4dp"
+            android:layout_height="@dimen/textHeight_24dp"
+            android:layout_marginStart="@dimen/margin_4dp"
             android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             app:layout_constraintBottom_toBottomOf="@+id/deliveryDate_tv"
             app:layout_constraintStart_toEndOf="@+id/deliveryDate_tv"
             app:layout_constraintTop_toTopOf="@+id/deliveryDate_tv"
-            tools:text="time" />
+            tools:text="10:30AM" />
 
         <TextView
             android:id="@+id/deliveryDate_tv"
-            android:layout_width="60dp"
-            android:layout_height="21dp"
-            android:layout_marginStart="4dp"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/textHeight_24dp"
+            android:layout_marginStart="@dimen/margin_4dp"
             android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             app:layout_constraintBottom_toBottomOf="@+id/when_lbl"
             app:layout_constraintStart_toEndOf="@+id/when_lbl"
             app:layout_constraintTop_toTopOf="@+id/when_lbl"
-            tools:text="date" />
+            tools:text="10/10/2018" />
 
         <TextView
             android:id="@+id/deliveryPlace_tv"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_height="@dimen/textHeight_24dp"
+            android:layout_marginStart="@dimen/margin_4dp"
             android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             app:layout_constraintBottom_toBottomOf="@+id/where_lbl"
@@ -102,9 +102,9 @@
             android:id="@+id/descr_large_tv"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/margin_8dp"
+            android:layout_marginStart="@dimen/margin_8dp"
+            android:layout_marginTop="@dimen/margin_8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -114,14 +114,14 @@
         <Button
             android:id="@+id/action_button_1"
             style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="90dp"
-            android:layout_height="37dp"
-            android:layout_margin="8dp"
+            android:layout_width="@dimen/action_button_1_width"
+            android:layout_height="@dimen/action_button_1_height"
+            android:layout_margin="@dimen/margin_8dp"
             android:background="@drawable/button_bgrnd"
             android:foreground="?android:attr/selectableItemBackground"
             android:minWidth="0dp"
-            android:paddingEnd="8dp"
-            android:paddingStart="8dp"
+            android:paddingEnd="@dimen/margin_8dp"
+            android:paddingStart="@dimen/margin_8dp"
             android:text="@string/add_offer"
             android:textColor="@android:color/black"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -131,9 +131,9 @@
 
         <TextView
             android:id="@+id/gain_tv"
-            android:layout_width="36dp"
-            android:layout_height="23dp"
-            android:layout_marginStart="4dp"
+            android:layout_width="@dimen/gain_tv_width"
+            android:layout_height="@dimen/textHeight_24dp"
+            android:layout_marginStart="@dimen/margin_4dp"
             android:textAlignment="textStart"
             app:layout_constraintBottom_toBottomOf="@+id/gain_lbl"
             app:layout_constraintStart_toEndOf="@+id/gain_lbl"

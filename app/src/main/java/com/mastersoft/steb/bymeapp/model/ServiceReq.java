@@ -12,6 +12,7 @@ public class ServiceReq {
     private String shortDescr;
     private String perfPlace;
     private long   timestamp;
+    private String key;
 
     public ServiceReq() {
     }
@@ -118,4 +119,9 @@ public class ServiceReq {
         this.perfPlace = perfPlace;
     }
 
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) { this.key = key; }
 }

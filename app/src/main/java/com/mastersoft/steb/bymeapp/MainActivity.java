@@ -1,27 +1,27 @@
 package com.mastersoft.steb.bymeapp;
 
-import android.content.Context;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.firebase.ui.auth.AuthUI;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.mastersoft.steb.bymeapp.adapters.fbServiceReqAdapter;
-import com.mastersoft.steb.bymeapp.model.Offer;
+import com.mastersoft.steb.bymeapp.adapters.ServiceReqAdapter;
 import com.mastersoft.steb.bymeapp.model.ServiceReq;
 
 import java.util.ArrayList;
@@ -30,19 +30,18 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity {
 
 
-    private MyRecyclerView    myRecyclerView;
-    fbServiceReqAdapter       mServiceReqAdapter;
-    LinearLayoutManager       mLinearLayoutManager;
-    private                   FirebaseAuth mFirebaseAuth;
-    private                   FirebaseAuth.AuthStateListener mAuthStateListener;
-    private                   FirebaseUser mFbUser;
-    private                   RecyclerView.AdapterDataObserver mDataObserver;
-    private static final int  RC_SIGN_IN = 1;
+    private MyRecyclerView     myRecyclerView;
+    ServiceReqAdapter          mServiceReqAdapter;
+    LinearLayoutManager        mLinearLayoutManager;
+    private                    FirebaseAuth mFirebaseAuth;
+    private                    FirebaseAuth.AuthStateListener mAuthStateListener;
+    private                    FirebaseUser mFbUser;
+    private                    RecyclerView.AdapterDataObserver mDataObserver;
+    private static final int   RC_SIGN_IN = 1;
+    final   ArrayList<ServiceReq> mData = new ArrayList<>();
+    private Query              mQuery;
+    private ChildEventListener mEventListner;
 
-    @Override
-    public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-        return super.onCreateView(parent, name, context, attrs);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,31 +53,27 @@ public class MainActivity extends AppCompatActivity {
         FirebaseDatabase dbInstance=FirebaseDatabase.getInstance();
         mFirebaseAuth       =FirebaseAuth.getInstance();
 
-        Query query = FirebaseDatabase.getInstance()
+        mQuery = FirebaseDatabase.getInstance()
                 .getReference()
                 .child("ServiceReq")
-                .orderByChild("timestamp").limitToLast(10);
+                .orderByChild("timeStamp").limitToFirst(10);
 
-        FirebaseRecyclerOptions<ServiceReq> options = new FirebaseRecyclerOptions.Builder<ServiceReq>()
-                .setQuery(query, ServiceReq.class)
-                .setLifecycleOwner(this)
-                .build();
-        mServiceReqAdapter = new fbServiceReqAdapter(options,Constants.SR_ADD_OFFER);
+        //FirebaseRecyclerOptions<ServiceReq> options = new FirebaseRecyclerOptions.Builder<ServiceReq>()
+        //        .setQuery(mQuery, ServiceReq.class)
+        //        .setLifecycleOwner(this)
+        //        .build();
+        //mServiceReqAdapter = new fbServiceReqAdapter(options,Constants.SR_ADD_OFFER, this);
+        //mServiceReqAdapter.startListening();
+
+        mServiceReqAdapter = new ServiceReqAdapter(Constants.SR_ADD_OFFER,this);
 
         myRecyclerView=findViewById(R.id.serviceReq_rv);
         mLinearLayoutManager = new LinearLayoutManager(this);
         mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         myRecyclerView.setLayoutManager(mLinearLayoutManager);
+        myRecyclerView.setAdapter(mServiceReqAdapter);
 
-
-        mDataObserver = new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                myRecyclerView.restoreScrollPosition();
-            }
-        };
-
-        mServiceReqAdapter.registerAdapterDataObserver(mDataObserver);
+        //mQuery.addChildEventListener(mEventListner);
 
         //Insert Offers
         /*
@@ -109,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
                     //Toast.makeText(MainActivity.this, "You're now signed in. Welcome to ByMeApp.", Toast.LENGTH_SHORT).show();
                 } else {
                     // User is signed out
+                    onUserSignOutCleanUp();
                     startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
@@ -128,12 +124,53 @@ public class MainActivity extends AppCompatActivity {
     private void onUserSignInInitialize(FirebaseUser user) {
         mFbUser=user;
         mServiceReqAdapter.setUser(user);
-        //mLinearLayoutManager = new LinearLayoutManager(this);
-        //mLinearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        //myRecyclerView.setLayoutManager(mLinearLayoutManager);
-        myRecyclerView.setAdapter(mServiceReqAdapter);
+        attachFireBaseListener();
+    }
+
+    private void attachFireBaseListener() {
+        if (mEventListner==null) {
+            mData.clear();
+            mEventListner = new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    ServiceReq sr = dataSnapshot.getValue(ServiceReq.class);
+                    String key = dataSnapshot.getKey();
+                    if (sr != null) {
+                        sr.setKey(key);
+                        mData.add(sr);
+                    }
+                    mServiceReqAdapter.setData(mData);
+                    myRecyclerView.restoreScrollPosition();
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                }
+            };
+            mQuery.addChildEventListener(mEventListner);
+        }
 
     }
+
+    private void onUserSignOutCleanUp() {
+        if (mEventListner!=null) {
+            mQuery.removeEventListener(mEventListner);
+            mEventListner = null;
+        }
+    }
+
 
     @Override
     protected void onPause() {
@@ -142,11 +179,16 @@ public class MainActivity extends AppCompatActivity {
         //mServiceReqAdapter.registerAdapterDataObserver(mDataObserver);
     }
 
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-        //mServiceReqAdapter.unregisterAdapterDataObserver(mDataObserver);
     }
 
     @Override
@@ -162,13 +204,15 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        //myRecyclerView.storeScrollPosition();
 
         if (id == R.id.menu_myServices) {
             //Invoca activity che mostra i servizi dell'utente
             Intent intent = new Intent(this,UserServicesReq.class);
             intent.putExtra(Constants.SERVICE_REQ_PARAM,Constants.SR_SEE_OFFER);
             intent.putExtra(Constants.USER_ID, mFbUser.getUid());
-            startActivity(intent);
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+            startActivity(intent, options.toBundle());
             return true;
         }
 
@@ -177,7 +221,8 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(this,OfferListActivity.class);
             intent.putExtra(Constants.OFFER_LIST_PARAM,Constants.OF_USER_OFFER);
             intent.putExtra(Constants.USER_ID         ,mFbUser.getUid());
-            startActivity(intent);
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+            startActivity(intent, options.toBundle());
             return true;
         }
 
@@ -193,8 +238,8 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode==RC_SIGN_IN) {
             if (resultCode==RESULT_OK) {
-            }
 
+            }
         }
     }
 
@@ -204,9 +249,5 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
-    @Override
-    protected void onDestroy() {
-        mServiceReqAdapter.unregisterAdapterDataObserver(mDataObserver);
-        super.onDestroy();
-    }
+
 }

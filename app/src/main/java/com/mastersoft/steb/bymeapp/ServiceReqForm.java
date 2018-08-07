@@ -11,15 +11,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mastersoft.steb.bymeapp.controllers.ServiceReqController;
 import com.mastersoft.steb.bymeapp.adapters.fbServiceReqAdapter;
 import com.mastersoft.steb.bymeapp.model.ServiceReq;
 import com.mastersoft.steb.bymeapp.utils.MaskWatcher;
+
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,23 +76,9 @@ public class ServiceReqForm extends AppCompatActivity implements fbServiceReqAda
         mDateWatcher = new MaskWatcher("##/##/##");
         mTimeWatcher = new MaskWatcher("##:##");
 
-        edtDateSrvReqTv.addTextChangedListener(mDateWatcher);
-        edtTimeSrvReqTv.addTextChangedListener(mTimeWatcher);
-
     }
 
     private void DisableEdits() {
-        /*
-        edtServiceShortDescrTv.setEnabled(false);
-        edtServiceDescrTv.setEnabled(false);
-        edtDateSrvReqTv.setEnabled(false);
-        edtTimeSrvReqTv.setEnabled(false);
-        edtPerformPlaceTv.setEnabled(false);
-        edtDeliveryPlaceTv.setEnabled(false);
-        edtPropGainTv.setEnabled(false);
-        edtContactInfoTv.setEnabled(false);
-        */
-
         disableEditText(edtServiceShortDescrTv);
         disableEditText(edtServiceDescrTv);
         disableEditText(edtDateSrvReqTv);
@@ -96,7 +87,6 @@ public class ServiceReqForm extends AppCompatActivity implements fbServiceReqAda
         disableEditText(edtDeliveryPlaceTv);
         disableEditText(edtPropGainTv);
         disableEditText(edtContactInfoTv);
-
     }
 
     private void LoadDbValues(String key) {
@@ -130,7 +120,7 @@ public class ServiceReqForm extends AppCompatActivity implements fbServiceReqAda
         */
 
         Date d= new Date();
-        long timestamp = d.getTime();
+        long timestamp = -d.getTime();
         ServiceReq sr = new ServiceReq(mUserId,
                                        serviceShortDescr,
                                        serviceDescr,
@@ -147,6 +137,9 @@ public class ServiceReqForm extends AppCompatActivity implements fbServiceReqAda
         if (se.getErrorCode()!=0) {
             Snackbar snackbar = Snackbar
                     .make(coordinatorLayout, se.getErrorDescription(), Snackbar.LENGTH_LONG);
+            View viewSb = snackbar.getView();
+            TextView tv = (TextView) viewSb.findViewById(android.support.design.R.id.snackbar_text);
+            tv.setTextColor(Color.WHITE);
             snackbar.show();
             return;
         }
@@ -172,19 +165,34 @@ public class ServiceReqForm extends AppCompatActivity implements fbServiceReqAda
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        if (mDateWatcher==null)
+            edtDateSrvReqTv.addTextChangedListener(mDateWatcher);
+        if (mTimeWatcher==null)
+            edtTimeSrvReqTv.addTextChangedListener(mTimeWatcher);
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
-        edtDateSrvReqTv.removeTextChangedListener(mDateWatcher);
-        edtTimeSrvReqTv.removeTextChangedListener(mTimeWatcher);
+
+        if (mDateWatcher!=null) {
+            edtDateSrvReqTv.removeTextChangedListener(mDateWatcher);
+            mDateWatcher = null;
+        }
+        if (mTimeWatcher!=null) {
+            edtTimeSrvReqTv.removeTextChangedListener(mTimeWatcher);
+            mTimeWatcher = null;
+        }
     }
 
 
     private void disableEditText(EditText editText) {
         editText.setFocusable(false);
-        //editText.setEnabled(false);
         editText.setCursorVisible(false);
         editText.setKeyListener(null);
-        //editText.setBackgroundColor(Color.TRANSPARENT);
         editText.getBackground().setColorFilter(Color.BLACK, PorterDuff.Mode.SRC_IN);
     }
+
 }

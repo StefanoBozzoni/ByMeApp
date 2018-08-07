@@ -3,6 +3,9 @@ package com.mastersoft.steb.bymeapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Explode;
+import android.transition.Slide;
+import android.transition.TransitionInflater;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -13,6 +16,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static android.view.Window.FEATURE_CONTENT_TRANSITIONS;
 
 public class OfferStatusFormActivity extends AppCompatActivity {
 
@@ -29,8 +34,16 @@ public class OfferStatusFormActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //Explode trans1 = new Explode();
+        //trans1.setDuration(2000);
+        //getWindow().requestFeature(FEATURE_CONTENT_TRANSITIONS);
+        Slide slide = (Slide) TransitionInflater.from(this).inflateTransition(R.transition.activity_sladein_right);
+        getWindow().setReenterTransition(slide);
+        getWindow().setExitTransition(slide);
+
         FirebaseDatabase dbInstance=FirebaseDatabase.getInstance();
         mDbOffer = dbInstance.getReference("Offers");
+
         setContentView(R.layout.activity_offer_status_form);
         ButterKnife.bind(this);
 

@@ -1,9 +1,12 @@
 package com.mastersoft.steb.bymeapp.adapters;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,10 +27,26 @@ public class fbOffersAdapter  extends FirebaseRecyclerAdapter<Offer,fbOffersAdap
 
     private Context rcContext;
     private int mCallerParam;
+    private Context cntx;
 
     public interface Completation {
         void onComplete(Offer of);
     }
+
+    @Override
+    public void onDataChanged() {
+        super.onDataChanged();
+        if (rcContext!=null) {
+            if (getItemCount() == 0) {
+                TextView noRecTv = ((Activity) rcContext).findViewById(R.id.noRecords_lbl);
+                noRecTv.setVisibility(View.VISIBLE);
+            } else {
+                TextView noRecTv = ((Activity) rcContext).findViewById(R.id.noRecords_lbl);
+                noRecTv.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
 
     /**
      * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
@@ -35,9 +54,10 @@ public class fbOffersAdapter  extends FirebaseRecyclerAdapter<Offer,fbOffersAdap
      *
      * @param options
     */
-    public fbOffersAdapter(@NonNull FirebaseRecyclerOptions<Offer> options, int callerParam) {
+    public fbOffersAdapter(@NonNull FirebaseRecyclerOptions<Offer> options, int callerParam, Context cntx) {
         super(options);
         mCallerParam=callerParam;
+        rcContext=cntx;
     }
 
     public class VHOffer extends RecyclerView.ViewHolder {
@@ -50,9 +70,9 @@ public class fbOffersAdapter  extends FirebaseRecyclerAdapter<Offer,fbOffersAdap
         public final Button status_btn;
 
 
-        public VHOffer(final View view) {
+        VHOffer(final View view) {
             super(view);
-            final Context cntx=view.getContext();
+            cntx=view.getContext();
             serviceDescr_tv = view.findViewById(R.id.serviceDescr_tv);
             deliveryPlace_tv = view.findViewById(R.id.deliveryPlace_tv);
             deliveryDate_tv = view.findViewById(R.id.deliveryDate_tv);
@@ -69,8 +89,8 @@ public class fbOffersAdapter  extends FirebaseRecyclerAdapter<Offer,fbOffersAdap
                         intent.putExtra(Constants.OFFER_FORM_PARAM, Constants.OF_VIEW_OFFER_FORM);
                         String key = getRef(getAdapterPosition()).getKey();
                         intent.putExtra(Constants.OFFER_KEY, key);
-                        cntx.startActivity(intent);
-                       // Toast.makeText(view.getContext(), "Ciao", Toast.LENGTH_SHORT).show();
+                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity)cntx,null);
+                        cntx.startActivity(intent, options.toBundle());
                     }
                 });
             }
@@ -86,7 +106,9 @@ public class fbOffersAdapter  extends FirebaseRecyclerAdapter<Offer,fbOffersAdap
                     String key = getRef(getAdapterPosition()).getKey();
                     anIntent.putExtra(Constants.OFFER_KEY,key);
                     anIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    cntx.startActivity(anIntent);
+
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation((Activity)cntx,null);
+                    cntx.startActivity(anIntent, options.toBundle());
                 }
             });
 
@@ -105,13 +127,6 @@ public class fbOffersAdapter  extends FirebaseRecyclerAdapter<Offer,fbOffersAdap
         return new VHOffer(view);
     }
 
-    /*
-    @Override
-    public ServiceReq getItem(int position) {
-        return super.getItem(getItemCount() - (position + 1));
-    }
-    */
-
     @Override
     protected void onBindViewHolder(@NonNull VHOffer holder, int position, @NonNull Offer model) {
         //Get the data[position] and load it in the viewholder
@@ -122,7 +137,10 @@ public class fbOffersAdapter  extends FirebaseRecyclerAdapter<Offer,fbOffersAdap
         holder.deliveryPlace_tv.setText(model.getDeliveryPlace());
         holder.deliveryDate_tv.setText(String.valueOf(model.getDeliveryDate()));
         holder.deliveryTime_tv.setText(String.valueOf(model.getDeliveryTime()));
-        holder.proposedGain_tv.setText(String.valueOf(model.getPropGain()));
+
+        String currencySymbol=cntx.getResources().getString(R.string.currency_symbol);
+        holder.proposedGain_tv.setText(String.valueOf(model.getPropGain()+" "+currencySymbol ));
+
     }
 
 }

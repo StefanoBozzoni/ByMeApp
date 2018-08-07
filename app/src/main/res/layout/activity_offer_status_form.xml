@@ -9,11 +9,11 @@
 
     <RadioGroup
         android:id="@+id/offer_rg"
-        android:layout_width="333dp"
-        android:layout_height="200dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="@dimen/offer_rg_width"
+        android:layout_height="@dimen/offer_rg_height"
+        android:layout_marginEnd="@dimen/margin_8dp"
+        android:layout_marginStart="@dimen/margin_8dp"
+        android:layout_marginTop="@dimen/margin_8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -22,26 +22,26 @@
         <RadioButton
             android:id="@+id/accepted_rb"
             android:layout_width="match_parent"
-            android:layout_height="49dp"
+            android:layout_height="@dimen/offer_rg_button_height"
             android:layout_weight="1"
             android:text="@string/accepted_str"
-            android:textSize="22sp" />
+            android:textSize="@dimen/textSize_22dp" />
 
         <RadioButton
             android:id="@+id/dismissed_rb"
             android:layout_width="match_parent"
-            android:layout_height="49dp"
+            android:layout_height="@dimen/offer_rg_button_height"
             android:layout_weight="1"
-            android:text="Discarded"
-            android:textSize="22sp" />
+            android:text="@string/discarded_str"
+            android:textSize="@dimen/textSize_22dp" />
 
         <RadioButton
             android:id="@+id/none_rb"
             android:layout_width="match_parent"
-            android:layout_height="49dp"
+            android:layout_height="@dimen/offer_rg_button_height"
             android:layout_weight="1"
-            android:text="None"
-            android:textSize="22sp" />
+            android:text="@string/none_str"
+            android:textSize="@dimen/textSize_22dp" />
 
     </RadioGroup>
 

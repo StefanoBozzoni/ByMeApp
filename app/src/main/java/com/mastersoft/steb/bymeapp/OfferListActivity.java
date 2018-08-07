@@ -33,26 +33,15 @@ public class OfferListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_offert_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
-        /*
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        */
-
         mCallerParam =0;
         Intent callerIntent=getIntent();
         if ((callerIntent.hasExtra(Constants.OFFER_LIST_PARAM)) && (callerIntent.getExtras()!=null)) {
             mCallerParam = callerIntent.getExtras().getInt(Constants.OFFER_LIST_PARAM);
             mServiceKey  = callerIntent.getExtras().getString(Constants.SERVICE_KEY,"");
             mUserId      = callerIntent.getExtras().getString(Constants.USER_ID,"");
-        }
+    }
 
-        FirebaseRecyclerOptions<Offer> options=null;
+    FirebaseRecyclerOptions<Offer> options=null;
 
         if (mCallerParam==Constants.OF_USER_OFFER) {
             toolbar.setTitle(getResources().getString(R.string.my_offer_list));
@@ -80,11 +69,12 @@ public class OfferListActivity extends AppCompatActivity {
 
             options = new FirebaseRecyclerOptions.Builder<Offer>()
                     .setQuery(query, Offer.class)
+                    .setLifecycleOwner(this)
                     .build();
         }
 
         if (options!=null) {
-            mOffersAdapter = new fbOffersAdapter(options,mCallerParam);
+            mOffersAdapter = new fbOffersAdapter(options,mCallerParam,this);
 
             mDataObserver = new RecyclerView.AdapterDataObserver() {
                 @Override
