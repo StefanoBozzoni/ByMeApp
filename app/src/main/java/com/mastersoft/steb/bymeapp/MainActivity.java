@@ -145,10 +145,28 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                    ServiceReq sr = dataSnapshot.getValue(ServiceReq.class);
+                    if (sr!=null) {
+                        //since there will only be max ten servReq in mData
+                        for (int i=0;i<mData.size();i++) {
+                            if (mData.get(i).getKey().equals(dataSnapshot.getKey()))
+                                mData.set(i,sr);
+                        }
+                        mServiceReqAdapter.notifyDataSetChanged();
+                    }
                 }
 
                 @Override
                 public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                    ServiceReq sr = dataSnapshot.getValue(ServiceReq.class);
+                    if (sr!=null) {
+                        //since there will only be max ten servReq in mData
+                        for (int i=0;i<mData.size();i++) {
+                            if (mData.get(i).getKey().equals(dataSnapshot.getKey()))
+                                mData.remove(i);
+                        }
+                        mServiceReqAdapter.notifyDataSetChanged();
+                    }
                 }
 
                 @Override

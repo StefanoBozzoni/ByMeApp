@@ -76,14 +76,15 @@ public class OfferListActivity extends AppCompatActivity {
         if (options!=null) {
             mOffersAdapter = new fbOffersAdapter(options,mCallerParam,this);
 
-            mDataObserver = new RecyclerView.AdapterDataObserver() {
-                @Override
-                public void onItemRangeInserted(int positionStart, int itemCount) {
-                    myRecyclerView.restoreScrollPosition();
-                }
-            };
-
-            mOffersAdapter.registerAdapterDataObserver(mDataObserver);
+            if (mDataObserver==null) {
+                mDataObserver = new RecyclerView.AdapterDataObserver() {
+                    @Override
+                    public void onItemRangeInserted(int positionStart, int itemCount) {
+                        myRecyclerView.restoreScrollPosition();
+                    }
+                };
+                mOffersAdapter.registerAdapterDataObserver(mDataObserver);
+            }
 
             myRecyclerView = findViewById(R.id.offers_rv);
             myRecyclerView.setHasFixedSize(true);
@@ -104,6 +105,7 @@ public class OfferListActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         mOffersAdapter.unregisterAdapterDataObserver(mDataObserver);
+        mDataObserver=null;
         super.onDestroy();
     }
 }

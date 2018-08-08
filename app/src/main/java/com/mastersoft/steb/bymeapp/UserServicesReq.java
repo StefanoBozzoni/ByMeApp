@@ -67,14 +67,16 @@ public class UserServicesReq extends AppCompatActivity {
 
         mServiceReqAdapter = new fbServiceReqAdapter(options,Constants.SR_SEE_OFFER, this);
 
-        mDataObserver = new RecyclerView.AdapterDataObserver() {
-            @Override
-            public void onItemRangeInserted(int positionStart, int itemCount) {
-                myRecyclerView.restoreScrollPosition();
-            }
-        };
+        if (mDataObserver==null) {
+            mDataObserver = new RecyclerView.AdapterDataObserver() {
+                @Override
+                public void onItemRangeInserted(int positionStart, int itemCount) {
+                    myRecyclerView.restoreScrollPosition();
+                }
+            };
 
-        mServiceReqAdapter.registerAdapterDataObserver(mDataObserver);
+            mServiceReqAdapter.registerAdapterDataObserver(mDataObserver);
+        }
         myRecyclerView     = findViewById(R.id.serviceReq_rv);
         myRecyclerView.setHasFixedSize(true);
 
@@ -93,6 +95,7 @@ public class UserServicesReq extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         mServiceReqAdapter.unregisterAdapterDataObserver(mDataObserver);
+        mDataObserver=null;
         super.onDestroy();
     }
 }
