@@ -27,6 +27,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:textViewStyle">@style/ByMeAppTextViewStyle</item>
         <item name="android:editTextStyle">@style/ByMeAppTextViewStyle</item>
+        <item name="coordinatorLayoutStyle">@style/Widget.Design.CoordinatorLayout</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

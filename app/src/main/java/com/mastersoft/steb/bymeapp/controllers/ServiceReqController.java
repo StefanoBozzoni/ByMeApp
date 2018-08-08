@@ -1,6 +1,8 @@
 package com.mastersoft.steb.bymeapp.controllers;
 
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
+import android.util.Patterns;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -9,6 +11,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mastersoft.steb.bymeapp.adapters.fbServiceReqAdapter;
 import com.mastersoft.steb.bymeapp.model.ServiceReq;
+import com.mastersoft.steb.bymeapp.utils.ValidationFunc;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
@@ -44,15 +47,25 @@ public class ServiceReqController {
             return new Error(30,"service payment should be provided");
         }
 
-        if (!isValidDate(sr.getDeliveryDate(),"dd/mm/yyyy")) {
+        if (!ValidationFunc.isValidDate(sr.getDeliveryDate(),"dd/mm/yyyy")) {
             return new Error(40,"delivery date is not a valid date");
         }
 
-        if ((!isValidDate(sr.getDeliveryTime(),"hh:mm")) ||
-            (!isValidDate(sr.getDeliveryTime(),"hh:mm a")))
+        if (!ValidationFunc.isValidDate(sr.getDeliveryTime(),"HH:mm"))
         {
             return new Error(50,"delivery time is not a valid time");
         }
+
+        if (!ValidationFunc.isValidMoney(String.valueOf(sr.getPropGain()))) {
+            return new Error(60,"proposed gain is not a valid money format");
+        }
+
+        /*
+        if (!isValidEmail(sr.getContactInfos()))
+        {
+            return new Error(70,"contact info are not a valid email address");
+        }
+        */
 
 
         return new Error(0,"OK");
@@ -78,17 +91,6 @@ public class ServiceReqController {
     }
 
 
-    public static boolean isValidDate(String input, String format) {
-        boolean valid = false;
-        try {
-            SimpleDateFormat dateFormat = new SimpleDateFormat(format, Locale.ITALY);
-            //dateFormat.setLenient(false) ;
-            String output = dateFormat.format(dateFormat.parse(input));
-            valid = input.equals(output);
-        } catch (Exception ignore) {}
-
-        return valid;
-    }
 
 }
 

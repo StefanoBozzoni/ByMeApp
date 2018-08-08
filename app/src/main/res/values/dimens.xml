@@ -26,7 +26,7 @@ http://developer.android.com/guide/topics/appwidgets/index.html#CreatingLayout
     <dimen name="time_lb_width">39dp</dimen>
     <dimen name="time_lb_height">35dp</dimen>
     <dimen name="margin_4dp">4dp</dimen>
-    <dimen name="deliveryTime_et_width">75dp</dimen>
+    <dimen name="deliveryTime_et_width">100dp</dimen>
     <dimen name="notes_et_width">365dp</dimen>
     <dimen name="notes_et_height">118dp</dimen>
     <dimen name="padding_2dp">2dp</dimen>

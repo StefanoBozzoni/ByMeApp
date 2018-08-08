@@ -167,9 +167,10 @@ public class ServiceReqForm extends AppCompatActivity implements fbServiceReqAda
     @Override
     protected void onStart() {
         super.onStart();
-        if (mDateWatcher==null)
+
+        if (mDateWatcher!=null) 
             edtDateSrvReqTv.addTextChangedListener(mDateWatcher);
-        if (mTimeWatcher==null)
+        if (mTimeWatcher!=null)
             edtTimeSrvReqTv.addTextChangedListener(mTimeWatcher);
     }
 
@@ -177,14 +178,10 @@ public class ServiceReqForm extends AppCompatActivity implements fbServiceReqAda
     protected void onStop() {
         super.onStop();
 
-        if (mDateWatcher!=null) {
+        if (mDateWatcher!=null)
             edtDateSrvReqTv.removeTextChangedListener(mDateWatcher);
-            mDateWatcher = null;
-        }
-        if (mTimeWatcher!=null) {
+        if (mTimeWatcher!=null)
             edtTimeSrvReqTv.removeTextChangedListener(mTimeWatcher);
-            mTimeWatcher = null;
-        }
     }
 
 

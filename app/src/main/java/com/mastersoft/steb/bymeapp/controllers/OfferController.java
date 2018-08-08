@@ -9,6 +9,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mastersoft.steb.bymeapp.adapters.fbOffersAdapter;
 import com.mastersoft.steb.bymeapp.model.Offer;
+import com.mastersoft.steb.bymeapp.utils.ValidationFunc;
 
 public class OfferController {
 
@@ -27,6 +28,7 @@ public class OfferController {
     public OfferController() {};
 
     public OfferController.Error validate(Offer of){
+
         if (of.getServiceDescr().trim().equals("")) {
             return new OfferController.Error(10,"short service description can't be void in offer data");
         }
@@ -40,9 +42,21 @@ public class OfferController {
         }
 
         if (of.getSerReqID().trim().equals("")) {
-            return new OfferController.Error(20,"service Id can't be void in offer data");
+            return new OfferController.Error(40,"service Id can't be void in offer data");
         }
 
+        if (!ValidationFunc.isValidDate(of.getDeliveryDate(),"dd/mm/yyyy")) {
+            return new OfferController.Error(50,"delivery date is not a valid date");
+        }
+
+        if (!ValidationFunc.isValidDate(of.getDeliveryTime(),"HH:mm"))
+        {
+            return new OfferController.Error(60,"delivery time is not a valid time");
+        }
+
+        if (!ValidationFunc.isValidMoney(String.valueOf(of.getPropGain()))) {
+            return new OfferController.Error(70,"proposed gain is not a valid money format");
+        }
 
         return new OfferController.Error(0,"OK");
 

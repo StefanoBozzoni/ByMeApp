@@ -243,6 +243,7 @@
             android:layout_marginStart="@dimen/margin_8dp"
             android:layout_marginTop="@dimen/margin_4dp"
             android:inputType="text"
+            android:textSize="@dimen/textSize_14sp"
             android:maxLength="43"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

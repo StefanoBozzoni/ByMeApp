@@ -38,9 +38,9 @@
                 style="@style/ByMeAppTextViewStyle.FormTextTitles"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/offerOn_lbl_height"
-                android:layout_marginTop="@dimen/margin_60dp"
                 android:layout_marginEnd="@dimen/margin_8dp"
                 android:layout_marginStart="@dimen/margin_8dp"
+                android:layout_marginTop="@dimen/margin_60dp"
                 android:text="@string/offer_on_service"
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -50,12 +50,12 @@
 
             <TextView
                 android:id="@+id/serviceDescr_lbl"
-                android:background="@color/colorPrimaryLight2"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/serviceDescr_lbl_height"
                 android:layout_marginEnd="@dimen/margin_8dp"
                 android:layout_marginStart="@dimen/margin_8dp"
                 android:layout_marginTop="@dimen/margin_8dp"
+                android:background="@color/colorPrimaryLight2"
                 android:textAlignment="center"
                 android:textSize="@dimen/textSize_18sp"
                 android:textStyle="bold|italic"
@@ -69,30 +69,31 @@
                 android:id="@+id/deliveryPlace_lbl"
                 android:layout_width="@dimen/deliveryPlace_lbl_width"
                 android:layout_height="@dimen/deliveryPlace_lbl_height"
+                android:layout_marginEnd="8dp"
                 android:layout_marginStart="@dimen/margin_8dp"
                 android:layout_marginTop="@dimen/deliveryPlace_lbl_marginTop"
                 android:gravity="center_vertical"
                 android:text="@string/delivery_place_str"
                 android:textSize="15sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="@+id/barrier"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/serviceDescr_lbl" />
 
             <EditText
                 android:id="@+id/deliveryPlace_et"
                 style="@style/ByMeAppTextViewStyle.FormEditText"
-                android:layout_width="@dimen/deliveryPlace_et_width"
-                android:layout_marginStart="@dimen/margin_8dp"
+                android:layout_width="234dp"
                 android:layout_marginTop="@dimen/deliveryPlace_et_marginTop"
+                android:hint="@string/hint_deliveryPlace_et"
                 android:inputType="text"
                 android:maxLength="35"
-                app:layout_constraintStart_toEndOf="@+id/deliveryPlace_lbl"
+                app:layout_constraintStart_toEndOf="@+id/barrier"
                 app:layout_constraintTop_toBottomOf="@+id/serviceDescr_lbl"
-                tools:text="delivery place example"
-                android:hint="@string/hint_deliveryPlace_et"/>
+                tools:text="delivery place example" />
 
             <TextView
-                android:id="@+id/deliveryDate_lbl"
+                android:id="@+id/proposedGain2_lbl"
                 android:layout_width="@dimen/deliveryDate_lbl_width"
                 android:layout_height="@dimen/deliveryDate_lbl_height"
                 android:layout_marginStart="@dimen/margin_8dp"
@@ -105,17 +106,17 @@
                 app:layout_constraintTop_toTopOf="@+id/guideline" />
 
             <TextView
-                android:id="@+id/proposedGain_lbl"
+                android:id="@+id/deliveryDate_lbl"
                 android:layout_width="@dimen/proposedGain_lbl_width"
                 android:layout_height="@dimen/proposedGain_lbl_height"
-                android:layout_marginEnd="@dimen/margin_8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginStart="@dimen/margin_8dp"
                 android:layout_marginTop="@dimen/margin_8dp"
                 android:gravity="center_vertical"
                 android:text="@string/delivery_date_str"
                 android:textSize="@dimen/textSize_15dp"
                 android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@+id/deliveryDate_et"
+                app:layout_constraintEnd_toEndOf="@+id/barrier"
                 app:layout_constraintHorizontal_chainStyle="spread"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/guideline2" />
@@ -124,26 +125,25 @@
                 android:id="@+id/deliveryDate_et"
                 style="@style/ByMeAppTextViewStyle.FormEditText"
                 android:layout_width="@dimen/deliveryDate_et_width"
-                android:layout_marginStart="@dimen/margin_8dp"
                 android:layout_marginTop="@dimen/margin_8dp"
+                android:hint="@string/hint_deliveredDate_et"
                 android:inputType="date"
                 android:maxLength="10"
-                app:layout_constraintStart_toEndOf="@+id/proposedGain_lbl"
+                android:textSize="@dimen/textSize_14sp"
+                app:layout_constraintStart_toEndOf="@+id/barrier"
                 app:layout_constraintTop_toTopOf="@+id/guideline2"
-                tools:text="10/12/2018"
-                android:hint="@string/hint_deliveredDate_et"/>
+                tools:text="10/12/2018" />
 
             <EditText
                 android:id="@+id/proposedGain_et"
                 style="@style/ByMeAppTextViewStyle.FormEditText"
                 android:layout_width="@dimen/proposedGain_et_width"
-                android:layout_marginStart="@dimen/margin_8dp"
                 android:layout_marginTop="@dimen/margin_8dp"
+                android:hint="@string/hint_proposedGain"
                 android:inputType="numberDecimal"
                 android:maxLength="12"
-                app:layout_constraintStart_toEndOf="@+id/deliveryDate_lbl"
-                app:layout_constraintTop_toTopOf="@+id/guideline"
-                android:hint="@string/hint_proposedGain"/>
+                app:layout_constraintStart_toEndOf="@+id/barrier"
+                app:layout_constraintTop_toTopOf="@+id/guideline" />
 
             <TextView
                 android:id="@+id/time_lb"
@@ -162,20 +162,21 @@
                 android:id="@+id/deliveryTime_et"
                 style="@style/ByMeAppTextViewStyle.FormEditText"
                 android:layout_width="@dimen/deliveryTime_et_width"
-                android:layout_marginStart="@dimen/margin_8dp"
+                android:layout_marginStart="4dp"
                 android:layout_marginTop="@dimen/margin_8dp"
+                android:hint="@string/hint_deliveryTime_et"
                 android:inputType="time"
+                android:textSize="@dimen/textSize_14sp"
                 app:layout_constraintStart_toEndOf="@+id/time_lb"
                 app:layout_constraintTop_toTopOf="@+id/guideline2"
-                tools:text="10:30"
-                android:hint="@string/hint_deliveryTime_et"/>
+                tools:text="10:30" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_begin="245dp" />
+                app:layout_constraintGuide_begin="236dp" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline2"
@@ -191,23 +192,25 @@
                 android:orientation="horizontal"
                 app:layout_constraintGuide_begin="305dp" />
 
+
+
             <EditText
                 android:id="@+id/notes_et"
-                android:paddingTop="@dimen/padding_2dp"
                 android:layout_width="@dimen/notes_et_width"
                 android:layout_height="@dimen/notes_et_height"
                 android:layout_marginEnd="@dimen/margin_8dp"
                 android:layout_marginStart="@dimen/margin_8dp"
                 android:layout_marginTop="@dimen/margin_8dp"
+                android:hint="@string/hint_notes_et"
                 android:inputType="textMultiLine|textWebEditText"
-                android:textSize="@dimen/textSize_15dp"
                 android:maxLength="180"
                 android:maxLines="6"
+                android:paddingTop="@dimen/padding_2dp"
+                android:textSize="@dimen/textSize_15dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/notes_lbl"
-                android:hint="@string/hint_notes_et"/>
+                app:layout_constraintTop_toBottomOf="@+id/notes_lbl" />
 
             <TextView
                 android:id="@+id/notes_lbl"
@@ -230,12 +233,19 @@
                 android:layout_marginBottom="@dimen/margin_8dp"
                 android:layout_marginEnd="@dimen/margin_8dp"
                 android:layout_marginTop="@dimen/margin_8dp"
-                android:text="@string/insert_caption_btn"
+                android:contentDescription="@string/hit_offer_insertButton"
                 android:onClick="InsertDB_BtnClick"
+                android:text="@string/insert_caption_btn"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/notes_et"
-                android:contentDescription="@string/hit_offer_insertButton"/>
+                app:layout_constraintTop_toBottomOf="@+id/notes_et" />
+
+            <android.support.constraint.Barrier
+                android:id="@+id/barrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="end"
+                app:constraint_referenced_ids="proposedGain2_lbl,deliveryDate_lbl,deliveryPlace_lbl" />
 
         </android.support.constraint.ConstraintLayout>
     </android.support.v4.widget.NestedScrollView>
