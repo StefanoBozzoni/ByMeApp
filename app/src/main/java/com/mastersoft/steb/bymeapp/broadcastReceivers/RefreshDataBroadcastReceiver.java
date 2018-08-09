@@ -1,4 +1,4 @@
-package com.mastersoft.steb.bymeapp.BroadcastReceivers;
+package com.mastersoft.steb.bymeapp.broadcastReceivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
