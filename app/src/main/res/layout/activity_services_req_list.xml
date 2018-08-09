@@ -33,6 +33,7 @@
         android:tint="@android:color/white"
         android:elevation="@dimen/elevation_6dp"
         app:pressedTranslationZ="@dimen/translation_fab_12dp"
+        android:contentDescription="@string/fab_service_req_content_description"
         app:srcCompat="@android:drawable/ic_input_add" />
 
 </android.support.design.widget.CoordinatorLayout>

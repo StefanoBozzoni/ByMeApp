@@ -17,7 +17,10 @@ public final class Constants {
     public static final int    SR_ADD_SERVICE     =7;
     public static final String SERVICE_KEY        ="SERVICE_KEY";
 
-   // public static final String OFFER_PARAM_KEY="OF_PARAM_KEY";
+    public static final String REFRESHDATA_JOB_TAG="REFRESH_SERV_REQ_JOB";
+    public static final String REFRESHDATA_JOB_ACTION="com.mastersoft.steb.bymeapp.refreshdata";
+
+
 
 
 }

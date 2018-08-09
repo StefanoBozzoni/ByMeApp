@@ -58,6 +58,15 @@
                 android:resource="@xml/by_me_app_widget_info" />
         </receiver>
 
+        <service
+            android:exported="false"
+            android:name=".MainActivity$RefresDataService">
+            <intent-filter>
+                <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
+            </intent-filter>
+        </service>
+
+
     </application>
 
 </manifest>

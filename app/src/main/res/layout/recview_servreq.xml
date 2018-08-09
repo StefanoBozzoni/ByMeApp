@@ -124,6 +124,7 @@
             android:paddingStart="@dimen/margin_8dp"
             android:text="@string/add_offer"
             android:textColor="@android:color/black"
+            android:contentDescription="@string/add_offer_button_str"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

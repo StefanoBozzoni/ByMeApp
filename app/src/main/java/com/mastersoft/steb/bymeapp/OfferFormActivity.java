@@ -195,7 +195,7 @@ public class OfferFormActivity extends AppCompatActivity implements fbServiceReq
         //Validazione e snackbar nel caso dati non validi
         String id = mDbOffer.push().getKey();
         if (id!=null) mDbOffer.child(id).setValue(sr);
-        Toast.makeText(this, "Offer added", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.Offer_added_toast_msg, Toast.LENGTH_LONG).show();
         onBackPressed();
 
     }

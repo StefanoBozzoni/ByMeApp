@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mastersoft.steb.bymeapp.controllers.ServiceReqController;
@@ -22,10 +21,7 @@ import com.mastersoft.steb.bymeapp.adapters.fbServiceReqAdapter;
 import com.mastersoft.steb.bymeapp.model.ServiceReq;
 import com.mastersoft.steb.bymeapp.utils.MaskWatcher;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -147,7 +143,7 @@ public class ServiceReqForm extends AppCompatActivity implements fbServiceReqAda
         //Validazione e snackbar nel caso dati non validi
         String id = mDbServReq.push().getKey();
         if (id!=null) mDbServReq.child(id).setValue(sr);
-        Toast.makeText(this, "Service request added", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.Service_request_added_Toast_msg, Toast.LENGTH_LONG).show();
         onBackPressed();
 
     }

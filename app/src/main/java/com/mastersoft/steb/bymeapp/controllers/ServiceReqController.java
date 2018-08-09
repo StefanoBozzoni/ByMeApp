@@ -13,9 +13,6 @@ import com.mastersoft.steb.bymeapp.adapters.fbServiceReqAdapter;
 import com.mastersoft.steb.bymeapp.model.ServiceReq;
 import com.mastersoft.steb.bymeapp.utils.ValidationFunc;
 
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-
 public class ServiceReqController {
 
     public static class Error {

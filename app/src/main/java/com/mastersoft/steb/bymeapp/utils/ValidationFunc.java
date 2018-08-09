@@ -8,6 +8,8 @@ import java.util.Locale;
 
 public class ValidationFunc {
 
+    private ValidationFunc() {}; //Can't be instantiated!
+
     public static boolean isValidDate(String input, String format) {
         boolean valid = false;
         try {

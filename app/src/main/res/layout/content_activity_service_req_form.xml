@@ -256,6 +256,7 @@
             android:layout_height="@dimen/InsertDB_Btn_height"
             android:onClick="InsertDB_BtnClick"
             android:text="@string/insert"
+            android:contentDescription="@string/service_form_button_insert_content_description"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/contactInfoTv" />

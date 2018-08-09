@@ -167,9 +167,9 @@ public class fbServiceReqAdapter  extends FirebaseRecyclerAdapter<ServiceReq,fbS
         holder.gainTv.setText(String.valueOf(model.getPropGain()+" "+currencySymbol ));
 
         if (mCallerParam== Constants.SR_ADD_OFFER)
-            holder.actionButton.setText("add offer");
+            holder.actionButton.setText(R.string.add_offer_button_str);
         else
-            holder.actionButton.setText("see offers");
+            holder.actionButton.setText(R.string.see_offer_button_str);
     }
 
     public void setUser(FirebaseUser user) {

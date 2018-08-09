@@ -12,9 +12,5 @@
     <color name="colorAccent">#ffc107</color>
     <color name="colorAccentLight">#f6f0db</color>
     <color name="colorAccentLight2">#f2eb8a</color>
-    <color name="colorAccentDarkColor">#c79100</color>
-
-    <color name="primaryTextColor">#ffffff</color>
-    <color name="secondaryTextColor">#000000</color>
 
 </resources>

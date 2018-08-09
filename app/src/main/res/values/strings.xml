@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">ByMeApp</string>
-    <string name="action_settings">Settings</string>
     <string name="my_services_requests">My services requests</string>
     <string name="title_activity_user_services_req">UserServicesReq</string>
     <string name="title_service_req_form">Your service requests</string>
@@ -10,7 +9,6 @@
     <string name="proposed_gain">payment for this service:</string>
     <string name="delivery_place">Delivery place</string>
     <string name="short_service_request_description">short service request description</string>
-    <string name="your_requests">your requests:</string>
     <string name="last_services_requests">Last services requests:</string>
     <string name="add_offer">add Offer</string>
     <string name="insert">insert</string>
@@ -24,7 +22,6 @@
     <string name="when_str">when:</string>
     <string name="where_str">where:</string>
     <string name="accepted_str">Accepted</string>
-    <string name="add_widget">Add widget</string>
     <string name="last_5_requests">Last 5 requests:</string>
     <string name="gain_str">gain:</string>
     <string name="currency_symbol">$</string>
@@ -50,4 +47,13 @@
     <string name="noRecords_lbl_text_str">No offers found</string>
     <string name="widget_services_lists_contentDescription">widget services lists</string>
     <string name="offer_status_button_str">update offer status</string>
+    <string name="add_offer_button_str">add offer</string>
+    <string name="see_offer_button_str">see offers</string>
+    <string name="Offer_added_toast_msg">Offer added</string>
+    <string name="Service_request_added_Toast_msg">Service request added</string>
+    <string name="log_service_refresh_str">refreshing data in background</string>
+    <string name="broadcasat_log_received_data_str">received from BroadCastreceiver</string>
+    <string name="fab_service_req_content_description">inserting services requests</string>
+    <string name="service_form_button_insert_content_description">register a service request in DB</string>
+    <string name="offer_list_button_str">see or add service requests\'s offers</string>
 </resources>

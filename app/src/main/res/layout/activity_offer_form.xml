@@ -10,7 +10,6 @@
     tools:context=".OfferFormActivity">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -29,7 +28,6 @@
         android:layout_height="match_parent">
 
         <android.support.constraint.ConstraintLayout
-            android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -84,6 +82,7 @@
                 android:id="@+id/deliveryPlace_et"
                 style="@style/ByMeAppTextViewStyle.FormEditText"
                 android:layout_width="234dp"
+                android:layout_marginStart="@dimen/margin_8dp"
                 android:layout_marginTop="@dimen/deliveryPlace_et_marginTop"
                 android:hint="@string/hint_deliveryPlace_et"
                 android:inputType="text"
@@ -125,6 +124,7 @@
                 android:id="@+id/deliveryDate_et"
                 style="@style/ByMeAppTextViewStyle.FormEditText"
                 android:layout_width="@dimen/deliveryDate_et_width"
+                android:layout_marginStart="@dimen/margin_8dp"
                 android:layout_marginTop="@dimen/margin_8dp"
                 android:hint="@string/hint_deliveredDate_et"
                 android:inputType="date"
@@ -138,6 +138,7 @@
                 android:id="@+id/proposedGain_et"
                 style="@style/ByMeAppTextViewStyle.FormEditText"
                 android:layout_width="@dimen/proposedGain_et_width"
+                android:layout_marginStart="@dimen/margin_8dp"
                 android:layout_marginTop="@dimen/margin_8dp"
                 android:hint="@string/hint_proposedGain"
                 android:inputType="numberDecimal"

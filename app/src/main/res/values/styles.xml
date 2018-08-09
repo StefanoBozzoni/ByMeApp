@@ -53,9 +53,4 @@
     </style>
 
 
-    <style name="Fade">
-        <item name="android:windowEnterAnimation">@transition/activity_explode</item>
-        <item name="android:windowExitAnimation">@transition/activity_explode</item>
-    </style>
-
 </resources>

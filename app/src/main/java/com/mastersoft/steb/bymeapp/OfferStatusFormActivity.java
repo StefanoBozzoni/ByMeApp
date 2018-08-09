@@ -3,7 +3,6 @@ package com.mastersoft.steb.bymeapp;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.transition.Explode;
 import android.transition.Slide;
 import android.transition.TransitionInflater;
 import android.view.View;
@@ -16,8 +15,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static android.view.Window.FEATURE_CONTENT_TRANSITIONS;
 
 public class OfferStatusFormActivity extends AppCompatActivity {
 
